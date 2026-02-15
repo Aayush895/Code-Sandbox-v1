@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cors": "^2.8.6",
+    "directory-tree": "^3.6.0",
     "dotenv": "^17.3.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "express": "^5.2.1",
@@ -22,7 +23,7 @@
     "format": "prettier --write .",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix ",
-    "start": "nodemon src/index.js" 
+    "start": "nodemon src/index.js"
   },
   "author": "Aayush Kumar Jha",
   "license": "ISC"

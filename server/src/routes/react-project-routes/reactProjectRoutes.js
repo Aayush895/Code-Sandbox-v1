@@ -1,9 +1,13 @@
-import express from 'express'
+import express from 'express';
 
-import { createProjectController } from '../../controllers/projectControllers.js'
+import {
+  createProjectController,
+  fetchProjectTreeController,
+} from '../../controllers/projectControllers.js';
 
-const reactProjectRouter = express.Router()
+const reactProjectRouter = express.Router();
 
-reactProjectRouter.post('/create', createProjectController)
+reactProjectRouter.post('/create', createProjectController);
+reactProjectRouter.post('/project-tree', fetchProjectTreeController);
 
-export default reactProjectRouter
+export default reactProjectRouter;
