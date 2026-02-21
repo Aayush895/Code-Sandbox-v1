@@ -1,10 +1,30 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import useCreateProject from '../../Hooks/mutations/useCreateProject'
 import Card from '../Shared/Card'
 
 function ProjectTemplate() {
+  const [projectName, setprojectName] = useState('')
+  const [error, setError] = useState('')
+  const { createProjectMutation } = useCreateProject()
+
   const navigate = useNavigate()
   function handleCancel() {
     navigate(-1)
+  }
+
+  function handleProjectName(e) {
+    setprojectName(e.target.value)
+  }
+
+  function handleCreateProject() {
+    if (!projectName) {
+      setError('Please provide a project name!')
+      return
+    }
+
+    setError(null)
+    createProjectMutation(projectName)
   }
 
   return (
@@ -58,6 +78,8 @@ function ProjectTemplate() {
               type="text"
               placeholder="my-awesome-project"
               className="input input-bordered w-full mx-3"
+              value={projectName}
+              onChange={handleProjectName}
             />
           </div>
 
@@ -65,7 +87,9 @@ function ProjectTemplate() {
             <button className="btn btn-ghost" onClick={handleCancel}>
               Cancel
             </button>
-            <button className="btn btn-primary">Create Project</button>
+            <button className="btn btn-primary" onClick={handleCreateProject}>
+              Create Project
+            </button>
           </div>
         </div>
       </div>
