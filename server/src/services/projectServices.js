@@ -4,6 +4,7 @@ import { access, mkdir } from 'node:fs/promises';
 import directoryTree from 'directory-tree';
 
 import { CREATE_REACT_COMMAND } from '../config/serverConfig.js';
+import AppError from '../utils/AppError.js';
 
 export async function createProjectService(projectName) {
   try {
@@ -19,8 +20,7 @@ export async function createProjectService(projectName) {
       { cwd: `${currentWorkingDirectory}/projects` },
       function (error) {
         if (error) {
-          console.log('Error in creating the project: ', error.message);
-          return;
+          throw new AppError(error.message || 'Error in creating the project', 500);
         }
       }
     );
@@ -28,6 +28,7 @@ export async function createProjectService(projectName) {
     return projectName;
   } catch (error) {
     console.log('Error: ', error);
+    throw new AppError('Something went wrong while creating the project', 500)
   }
 }
 

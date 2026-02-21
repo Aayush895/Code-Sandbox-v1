@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useCreateProject from '../../Hooks/mutations/useCreateProject'
 import Card from '../Shared/Card'
+import ErrorAlert from '../Shared/ErrorAlert'
 
 function ProjectTemplate() {
   const [projectName, setprojectName] = useState('')
@@ -25,7 +26,22 @@ function ProjectTemplate() {
 
     setError(null)
     createProjectMutation(projectName)
+    navigate('/project')
   }
+
+  useEffect(() => {
+    let timerId = null
+
+    if (error) {
+      timerId = setTimeout(() => {
+        setError(null)
+      }, 3000)
+    }
+
+    return () => {
+      clearInterval(timerId)
+    }
+  }, [error])
 
   return (
     <div className="min-h-screen bg-base-200 py-16 px-6">
@@ -68,7 +84,7 @@ function ProjectTemplate() {
 
         {/* Project Name Section */}
         <div className="mt-16 max-w-xl mx-auto">
-          <div className="flex items-center">
+          <div className="flex items-center relative">
             <label className="label mx-3">
               <span className="label-text font-semibold text-base">
                 Project Name
@@ -81,9 +97,12 @@ function ProjectTemplate() {
               value={projectName}
               onChange={handleProjectName}
             />
+            {error && <ErrorAlert reason={error} />}
           </div>
 
-          <div className="mt-8 flex justify-center gap-4">
+          <div
+            className={`${!error ? 'mt-8' : 'mt-16'} flex justify-center gap-4`}
+          >
             <button className="btn btn-ghost" onClick={handleCancel}>
               Cancel
             </button>
