@@ -23,7 +23,7 @@
     "format": "prettier --write .",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix ",
-    "start": "nodemon src/index.js"
+    "start": "nodemon --ignore projects src/index.js"
   },
   "author": "Aayush Kumar Jha",
   "license": "ISC"

@@ -1,41 +1,52 @@
 import { exec } from 'node:child_process';
-import { access, mkdir } from 'node:fs/promises';
 
 import directoryTree from 'directory-tree';
+import fs from 'fs';
+import path from 'path';
 
-import { CREATE_REACT_COMMAND } from '../config/serverConfig.js';
+import { createReactCommand } from '../config/serverConfig.js';
 import AppError from '../utils/AppError.js';
 
 export async function createProjectService(projectName) {
   try {
-    const currentWorkingDirectory = process.cwd();
+    if (!fs.existsSync(`./projects`)) {
+      // If it doesn't exist, create the directory
+      fs.mkdirSync(`./projects`);
 
-    if (!access(`${currentWorkingDirectory}/projects`)) {
-      mkdir(`${currentWorkingDirectory}/projects`);
+      console.log(`Directory '${`./projects`}' created.`);
+    } else {
+      console.log(`Directory '${`./projects`}' already exists.`);
     }
 
     // After the projects folder is created generate a boiler plate code for react-project
-    exec(
-      CREATE_REACT_COMMAND(projectName),
-      { cwd: `${currentWorkingDirectory}/projects` },
-      function (error) {
-        if (error) {
-          throw new AppError(error.message || 'Error in creating the project', 500);
+    await new Promise((resolve, reject) => {
+      exec(
+        createReactCommand(projectName),
+        { cwd: `./projects` },
+        function (error) {
+          if (error) {
+            reject(error);
+            console.log('Error: ', error);
+            return;
+          }
+
+          resolve();
         }
-      }
-    );
+      );
+    });
 
     return projectName;
   } catch (error) {
     console.log('Error: ', error);
-    throw new AppError('Something went wrong while creating the project', 500)
+    throw new AppError('Something went wrong while creating the project', 500);
   }
 }
 
 export async function fetchProjectTreeService(projectName) {
   try {
-    const projectPath = `${process.cwd()}/projects/${projectName}`;
+    const projectPath = path.resolve(`./projects/${projectName}`);
     const projectTree = directoryTree(projectPath);
+    console.log('LOGGING TREE: ', projectTree, process.cwd());
     return projectTree;
   } catch (error) {
     console.log('Error in fetching the project directory: ', error);
