@@ -46,7 +46,6 @@ export async function fetchProjectTreeService(projectName) {
   try {
     const projectPath = path.resolve(`./projects/${projectName}`);
     const projectTree = directoryTree(projectPath);
-    console.log('LOGGING TREE: ', projectTree, process.cwd());
     return projectTree;
   } catch (error) {
     console.log('Error in fetching the project directory: ', error);
