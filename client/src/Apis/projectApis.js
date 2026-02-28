@@ -21,7 +21,6 @@ export async function fetchProjectTree(projectName) {
       },
     )
 
-    console.log('LOGGING RESPONSE PROJECT-TREE: ', fetchProjectResponse)
     return fetchProjectResponse?.data
   } catch (error) {
     console.log('Error: ', error)
