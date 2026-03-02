@@ -1,8 +1,8 @@
 import useFetchProjectStrcture from '../../Hooks/queries/useFetchProjectStructure'
 import useProjectStore from '../../store/useProjectStore'
-import ProjectFolder from '../FolderStructure/ProjectFolder'
 import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
+import ProjectFolder from './FolderStructure/ProjectFolder'
 
 function Project() {
   const { projectName } = useProjectStore()
@@ -20,7 +20,10 @@ function Project() {
       {isPending ? (
         <Loader fullScreen={true} />
       ) : (
-        <ProjectFolder rootDirectory={projectStructure?.projectTree} />
+        <ProjectFolder
+          rootDirectory={projectStructure?.projectTree}
+          isRoot={true}
+        />
       )}
     </div>
   )
