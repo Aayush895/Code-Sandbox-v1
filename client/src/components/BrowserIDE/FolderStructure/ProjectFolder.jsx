@@ -2,8 +2,6 @@
 import { FileIcon } from '../../Shared/FileIcon'
 import { FolderIcon } from '../../Shared/FolderIcon'
 function ProjectFolder({ rootDirectory, isRoot = false }) {
-  console.log('LOGGING ROOT: ', rootDirectory)
-
   /**
    * If building our own custom folder structure then this is the logic for handling if the folder is open or closed
    */
