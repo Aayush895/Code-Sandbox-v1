@@ -1,15 +1,11 @@
 import axiosInstance from '../Utils/axiosInstance'
 
 export async function createProject(projectName) {
-  try {
-    const createProjectResponse = await axiosInstance.post('/api/v0/create', {
-      projectName,
-    })
+  const createProjectResponse = await axiosInstance.post('/api/v0/create', {
+    projectName,
+  })
 
-    return createProjectResponse?.data
-  } catch (error) {
-    console.log('Error: ', error)
-  }
+  return createProjectResponse?.data
 }
 
 export async function fetchProjectTree(projectName) {

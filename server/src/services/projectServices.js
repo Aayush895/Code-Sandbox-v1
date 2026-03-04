@@ -15,25 +15,30 @@ export async function createProjectService(projectName) {
 
       console.log(`Directory '${`./projects`}' created.`);
     } else {
-      console.log(`Directory '${`./projects`}' already exists.`);
-    }
+      // If the project folder already exists then just check if a directory with the same project name exists or not. If it does, just return with an empty array
+      if (fs.existsSync(`./projects/${projectName}`)) {
+        console.log(
+          `Directory '${`./projects/${projectName}`}' already exists.`
+        );
+        return {};
+      }
+      
+      await new Promise((resolve, reject) => {
+        exec(
+          createReactCommand(projectName),
+          { cwd: `./projects` },
+          function (error) {
+            if (error) {
+              reject(error);
+              console.log('Error: ', error);
+              return;
+            }
 
-    // After the projects folder is created generate a boiler plate code for react-project
-    await new Promise((resolve, reject) => {
-      exec(
-        createReactCommand(projectName),
-        { cwd: `./projects` },
-        function (error) {
-          if (error) {
-            reject(error);
-            console.log('Error: ', error);
-            return;
+            resolve();
           }
-
-          resolve();
-        }
-      );
-    });
+        );
+      });
+    }
 
     return projectName;
   } catch (error) {

@@ -1,6 +1,6 @@
-function ErrorAlert({ reason }) {
+function ErrorAlert({ reason, className = 'absolute w-full top-12' }) {
   return (
-    <div role="alert" className="alert alert-error absolute w-full top-12">
+    <div role="alert" className={`alert alert-error ${className}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6 shrink-0 stroke-current"
@@ -18,4 +18,4 @@ function ErrorAlert({ reason }) {
     </div>
   )
 }
-export default ErrorAlert
+ export default ErrorAlert

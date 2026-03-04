@@ -10,8 +10,7 @@ function ProjectTemplate() {
   const [projectName, setprojectName] = useState('')
   const [error, setError] = useState('')
   const { setProjectName } = useProjectStore()
-  const { createProjectMutation, isProjectLoading } =
-    useCreateProject()
+  const { createProjectMutation, isProjectLoading } = useCreateProject()
 
   const navigate = useNavigate()
   function handleCancel() {
@@ -28,10 +27,14 @@ function ProjectTemplate() {
       return
     }
 
-    setError(null)
     setProjectName(projectName)
-    await createProjectMutation(projectName)
-    navigate('/project')
+    try {
+      const data = await createProjectMutation(projectName)
+      navigate(`/project/${data?.id}`)
+    } catch (error) {
+      console.log('Error: ', error)
+      setError('Something went wrong when creating the project')
+    }
   }
 
   useEffect(() => {
@@ -102,12 +105,9 @@ function ProjectTemplate() {
               value={projectName}
               onChange={handleProjectName}
             />
-            {error && <ErrorAlert reason={error} />}
           </div>
 
-          <div
-            className={`${!error ? 'mt-8' : 'mt-16'} flex justify-center gap-4`}
-          >
+          <div className={`mt-8 flex justify-center items-center gap-4`}>
             <button className="btn btn-ghost" onClick={handleCancel}>
               Cancel
             </button>
@@ -116,6 +116,11 @@ function ProjectTemplate() {
             </button>
             {isProjectLoading && <Loader />}
           </div>
+          {error && (
+            <div className="flex justify-center mt-4">
+              <ErrorAlert reason={error} className="w-full" />
+            </div>
+          )}
         </div>
       </div>
     </div>

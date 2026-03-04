@@ -8,7 +8,7 @@ function Routes() {
     <PageRoutes>
       <Route path="/" element={<ProjectDashboard />} />
       <Route path="/template" element={<ProjectTemplate />} />
-      <Route path="/project" element={<Project />} />
+      <Route path="/project/:projectId" element={<Project />} />
     </PageRoutes>
   )
 }

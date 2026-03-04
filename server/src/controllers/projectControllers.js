@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   createProjectService,
   fetchProjectTreeService,
@@ -14,11 +16,24 @@ export async function createProjectController(req, res, next) {
 
     const projectData = await createProjectService(projectName);
 
+    if (JSON.stringify(projectData) == '{}') {
+      console.log('Project already exists');
+      return res.status(409).send({
+        success: false,
+        status: 409,
+        message: `Project with name - ${projectName} already exists`,
+        data: projectData,
+      });
+    }
+
+    const uniqueProjectId = uuidv4();
+
     return res.status(200).send({
       success: true,
       status: 200,
       message: 'Project was created successfully!',
       data: projectData,
+      id: uniqueProjectId,
     });
   } catch (error) {
     console.log('Error in project controller: ', error.message);
