@@ -1,11 +1,17 @@
+import { createServer } from 'node:http';
+
 import cors from 'cors';
 import express from 'express';
+import { Server } from 'socket.io';
 
 import { PORT } from './config/serverConfig.js';
+import editorHandlers from './handlers/editorHandlers.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import v0Router from './routes/v0Routes.js';
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -22,8 +28,17 @@ app.get('/ping', (req, res) => {
 
 app.use('/api', v0Router);
 
+let editorNamespace = io.of('/editor');
+editorNamespace.on('connection', (socket) => {
+  console.log('A user is connected');
+  editorHandlers(socket);
+  socket.on('disconnect', () => {
+    console.log('A user is disconnected');
+  });
+});
+
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`App is listening on port: ${PORT}`);
 });
