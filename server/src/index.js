@@ -11,7 +11,12 @@ import v0Router from './routes/v0Routes.js';
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  },
+});
 app.use(express.json());
 app.use(express.urlencoded());
 

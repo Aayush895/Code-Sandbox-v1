@@ -1,7 +1,12 @@
 // import { useState } from 'react'
+import useEditorSocketStore from '../../../store/useEditorSocketStore'
+import useProjectStore from '../../../store/useProjectStore'
 import { FileIcon } from '../../Shared/FileIcon'
 import { FolderIcon } from '../../Shared/FolderIcon'
 function ProjectFolder({ rootDirectory, isRoot = false }) {
+  const { editorSocket } = useEditorSocketStore()
+  const { projectId } = useProjectStore()
+
   /**
    * If building our own custom folder structure then this is the logic for handling if the folder is open or closed
    */
@@ -12,6 +17,18 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
   //     [folder?.name]: !folderVisibility[folder?.name],
   //   })
   // }
+
+  // Below function parses the file and shows the contents of the file on the editor
+  function handleShowFileContents(rootDirectory, fileName) {
+    if (editorSocket) {
+      const filePath = `${rootDirectory?.path}/${fileName}`
+      const roomId = `${projectId}/${fileName}`
+      editorSocket.emit('read-file', { filePath })
+
+      // After the client emits read-file and the contents are displayed, make the client join the room
+      editorSocket.emit('join-room', { roomId })
+    }
+  }
 
   return (
     rootDirectory && (
@@ -36,7 +53,12 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
                     key={`${childNode.name}-${idx}`}
                   />
                 ) : (
-                  <li key={`${childNode.name}-${idx}`}>
+                  <li
+                    key={`${childNode.name}-${idx}`}
+                    onDoubleClick={() =>
+                      handleShowFileContents(rootDirectory, childNode.name)
+                    }
+                  >
                     <button className="flex items-center gap-2 text-sm text-base-content/60 hover:text-base-content hover:bg-base-300 rounded-md px-2 py-1 w-full">
                       <FileIcon name={childNode.name} />
                       <span className="truncate">{childNode.name}</span>
