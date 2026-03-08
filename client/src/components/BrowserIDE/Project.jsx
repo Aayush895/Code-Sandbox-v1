@@ -1,5 +1,7 @@
-import { Editor } from '@monaco-editor/react'
+import { useEffect } from 'react'
+import { io } from 'socket.io-client'
 import useFetchProjectStrcture from '../../Hooks/queries/useFetchProjectStructure'
+import useEditorSocketStore from '../../store/useEditorSocketStore'
 import useProjectStore from '../../store/useProjectStore'
 import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
@@ -10,6 +12,15 @@ function Project() {
   const { projectName } = useProjectStore()
   const { projectStructure, isPending, isError } =
     useFetchProjectStrcture(projectName)
+
+  const { setEditorSocket } = useEditorSocketStore()
+  console.log('LOGGING TREE: ', projectStructure?.projectTree)
+  useEffect(() => {
+    if (isPending == false) {
+      const socket = io(`${import.meta.env.VITE_BASE_URL}/editor`)
+      setEditorSocket(socket)
+    }
+  }, [isPending])
 
   if (isError) {
     return <Dialog title={'Error'} content={'Error in project creation'} />
