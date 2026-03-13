@@ -35,9 +35,8 @@ function editorHandlers(socket) {
   // Event function / handler for writing the contents of a file
   async function writeFileHandler({ filePath, roomId, fileData }) {
     try {
-      const writeFileResponse = await fs.writeFile(filePath, fileData);
+      await fs.writeFile(filePath, fileData);
       socket.to(roomId).emit('write-file-success', {
-        fileData: writeFileResponse,
         activeFile: filePath,
         message: 'File written successfully',
       });
