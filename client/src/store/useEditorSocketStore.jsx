@@ -12,6 +12,11 @@ const useEditorSocketStore = create((set) => ({
       fileContentsSetterFn(fileData)
     })
 
+    incomingSocketObj?.on('write-file-success', ({ activeFile, message }) => {
+      activeFileSetterFn(activeFile)
+      console.log(message)
+    })
+
     set({
       editorSocket: incomingSocketObj,
     })
