@@ -20,13 +20,6 @@ export async function createProjectService(projectName, uniqueProjectId) {
       fs.mkdirSync(`./projects/${uniqueProjectId}`);
       console.log(`Directory './projects/${uniqueProjectId}' created.`);
     }
-    // If the project folder with projectId already exists then just check if a directory with the same project name exists or not. If it does, just return with an empty object
-    if (fs.existsSync(`./projects/${uniqueProjectId}`)) {
-      console.log(
-        `Directory '${`./projects/${uniqueProjectId}`}' already exists.`
-      );
-      return {};
-    }
 
     await new Promise((resolve, reject) => {
       exec(

@@ -1,13 +1,12 @@
 import { useMutation } from '@tanstack/react-query'
 import { createProject } from '../../Apis/projectApis'
-import useProjectStore from '../../store/useProjectStore'
 
 function useCreateProject() {
-  const { setProjectId } = useProjectStore()
   const { isPending, isError, mutateAsync } = useMutation({
     mutationFn: (projectName) => createProject(projectName),
     onSuccess: (data) => {
-      setProjectId(data?.id)
+      // Do Something
+      console.log('on mutation success: ', data)
     },
   })
 

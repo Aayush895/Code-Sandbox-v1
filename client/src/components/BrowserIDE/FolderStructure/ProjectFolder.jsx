@@ -1,11 +1,11 @@
 // import { useState } from 'react'
+import { useParams } from 'react-router'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
-import useProjectStore from '../../../store/useProjectStore'
 import { FileIcon } from '../../Shared/FileIcon'
 import { FolderIcon } from '../../Shared/FolderIcon'
 function ProjectFolder({ rootDirectory, isRoot = false }) {
   const { editorSocket } = useEditorSocketStore()
-  const { projectId } = useProjectStore()
+  const { projectId } = useParams()
 
   /**
    * If building our own custom folder structure then this is the logic for handling if the folder is open or closed
