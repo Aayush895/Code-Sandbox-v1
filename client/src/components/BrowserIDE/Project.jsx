@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
+import { useParams } from 'react-router'
 import { io } from 'socket.io-client'
 import useFetchProjectStrcture from '../../Hooks/queries/useFetchProjectStructure'
 import useEditorSocketStore from '../../store/useEditorSocketStore'
-import useProjectStore from '../../store/useProjectStore'
 import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
 import BrowserEditor from './Editor/BrowserEditor'
 import ProjectFolder from './FolderStructure/ProjectFolder'
 
 function Project() {
-  const { projectName } = useProjectStore()
+  const { projectId } = useParams()
   const { projectStructure, isPending, isError } =
-    useFetchProjectStrcture(projectName)
+    useFetchProjectStrcture(projectId)
 
   const { setEditorSocket } = useEditorSocketStore()
   console.log('LOGGING TREE: ', projectStructure?.projectTree)

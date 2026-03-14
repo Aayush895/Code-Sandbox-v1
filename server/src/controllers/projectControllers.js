@@ -14,7 +14,11 @@ export async function createProjectController(req, res, next) {
       throw new AppError('Project Name not received!', 422);
     }
 
-    const projectData = await createProjectService(projectName);
+    const uniqueProjectId = uuidv4();
+    const projectData = await createProjectService(
+      projectName,
+      uniqueProjectId
+    );
 
     if (JSON.stringify(projectData) == '{}') {
       console.log('Project already exists');
@@ -25,8 +29,6 @@ export async function createProjectController(req, res, next) {
         data: projectData,
       });
     }
-
-    const uniqueProjectId = uuidv4();
 
     return res.status(200).send({
       success: true,
@@ -43,13 +45,12 @@ export async function createProjectController(req, res, next) {
 
 export async function fetchProjectTreeController(req, res, next) {
   try {
-    const projectName = req.body.projectName;
-
-    if (!projectName) {
+    const { projectId } = req.params;
+    if (!projectId) {
       throw new AppError('Project Name not received!', 422);
     }
 
-    const projectTree = await fetchProjectTreeService(projectName);
+    const projectTree = await fetchProjectTreeService(projectId);
 
     return res.status(200).send({
       success: true,
