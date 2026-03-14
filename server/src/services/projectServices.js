@@ -7,24 +7,31 @@ import path from 'path';
 import { createReactCommand } from '../config/serverConfig.js';
 import AppError from '../utils/AppError.js';
 
-export async function createProjectService(projectName) {
+export async function createProjectService(projectName, uniqueProjectId) {
   try {
     if (!fs.existsSync(`./projects`)) {
       // If it doesn't exist, create the directory
       fs.mkdirSync(`./projects`);
-
       console.log(`Directory '${`./projects`}' created.`);
     }
-    // If the project folder already exists then just check if a directory with the same project name exists or not. If it does, just return with an empty array
-    if (fs.existsSync(`./projects/${projectName}`)) {
-      console.log(`Directory '${`./projects/${projectName}`}' already exists.`);
+
+    // If the project has been created in the directory, then create another sub-folder with name as `unique-projectid`
+    if (!fs.existsSync(`./projects/${uniqueProjectId}`)) {
+      fs.mkdirSync(`./projects/${uniqueProjectId}`);
+      console.log(`Directory './projects/${uniqueProjectId}' created.`);
+    }
+    // If the project folder with projectId already exists then just check if a directory with the same project name exists or not. If it does, just return with an empty object
+    if (fs.existsSync(`./projects/${uniqueProjectId}`)) {
+      console.log(
+        `Directory '${`./projects/${uniqueProjectId}`}' already exists.`
+      );
       return {};
     }
 
     await new Promise((resolve, reject) => {
       exec(
         createReactCommand(projectName),
-        { cwd: `./projects` },
+        { cwd: `./projects/${uniqueProjectId}` },
         function (error) {
           if (error) {
             reject(error);
@@ -44,9 +51,9 @@ export async function createProjectService(projectName) {
   }
 }
 
-export async function fetchProjectTreeService(projectName) {
+export async function fetchProjectTreeService(uniqueProjectId) {
   try {
-    const projectPath = path.resolve(`./projects/${projectName}`);
+    const projectPath = path.resolve(`./projects/${uniqueProjectId}`);
     const projectTree = directoryTree(projectPath);
     return projectTree;
   } catch (error) {

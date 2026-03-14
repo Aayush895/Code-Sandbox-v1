@@ -4,23 +4,22 @@ import { useEffect } from 'react'
 import { fetchProjectTree } from '../../Apis/projectApis'
 import useProjectStore from '../../store/useProjectStore'
 
-function useFetchProjectStrcture(incomingProjectName) {
-  const { projectName, projectStructure, setProjectStructure } =
-    useProjectStore()
+function useFetchProjectStrcture(projectId) {
+  const { projectStructure, setProjectStructure } = useProjectStore()
   const {
     isPending,
     isError,
     data: fetchedProjectTreeData,
   } = useQuery({
-    queryKey: ['projectTree', incomingProjectName],
-    queryFn: async () => await fetchProjectTree(incomingProjectName),
+    queryKey: [projectId],
+    queryFn: async () => await fetchProjectTree(projectId),
   })
 
   useEffect(() => {
-    if (fetchedProjectTreeData && projectName) {
+    if (fetchedProjectTreeData) {
       setProjectStructure(fetchedProjectTreeData)
     }
-  }, [projectName, fetchedProjectTreeData])
+  }, [fetchedProjectTreeData])
 
   return { projectStructure, isPending, isError }
 }

@@ -8,13 +8,10 @@ export async function createProject(projectName) {
   return createProjectResponse?.data
 }
 
-export async function fetchProjectTree(projectName) {
+export async function fetchProjectTree(projectId) {
   try {
-    const fetchProjectResponse = await axiosInstance.post(
-      'api/v0/project-tree',
-      {
-        projectName,
-      },
+    const fetchProjectResponse = await axiosInstance.get(
+      `api/v0/project-tree/${projectId}`,
     )
 
     return fetchProjectResponse?.data

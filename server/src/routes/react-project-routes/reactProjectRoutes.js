@@ -8,6 +8,6 @@ import {
 const reactProjectRouter = express.Router();
 
 reactProjectRouter.post('/create', createProjectController);
-reactProjectRouter.post('/project-tree', fetchProjectTreeController);
+reactProjectRouter.get('/project-tree/:projectId', fetchProjectTreeController);
 
 export default reactProjectRouter;
