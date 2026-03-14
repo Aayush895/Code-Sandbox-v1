@@ -1,12 +1,12 @@
 import Editor from '@monaco-editor/react'
+import { useParams } from 'react-router'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
 import useEditorStore from '../../../store/useEditorStore'
-import useProjectStore from '../../../store/useProjectStore'
 
 function BrowserEditor() {
   const { fileContents, activeFile } = useEditorStore()
   const { editorSocket } = useEditorSocketStore()
-  const { projectId } = useProjectStore()
+  const { projectId } = useParams()
   let timerId = null
 
   function handleWriteFile(value) {

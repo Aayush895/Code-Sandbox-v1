@@ -36,7 +36,7 @@ app.use('/api', v0Router);
 let editorNamespace = io.of('/editor');
 editorNamespace.on('connection', (socket) => {
   console.log('A user is connected');
-  editorHandlers(socket);
+  editorHandlers(socket, editorNamespace);
   socket.on('disconnect', () => {
     console.log('A user is disconnected');
   });

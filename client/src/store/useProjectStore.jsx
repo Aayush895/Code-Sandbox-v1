@@ -1,10 +1,6 @@
 import { create } from 'zustand'
 
 const useProjectStore = create((set) => ({
-  projectId: '',
-  setProjectId: function (incomingProjectId) {
-    set({ projectId: incomingProjectId })
-  },
   projectName: '',
   setProjectName: function (incomingProjectName) {
     set({ projectName: incomingProjectName })
