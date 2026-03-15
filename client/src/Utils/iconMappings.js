@@ -1,8 +1,5 @@
 // Icon.js - no JSX here at all
-import {
-  AiOutlineFileText,
-  AiOutlineFileImage,
-} from 'react-icons/ai'
+import { AiOutlineFileText, AiOutlineFileImage } from 'react-icons/ai'
 import { BsFiletypeJson, BsFiletypeMd } from 'react-icons/bs'
 import { DiJavascript1, DiCss3, DiHtml5, DiReact } from 'react-icons/di'
 

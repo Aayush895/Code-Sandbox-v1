@@ -26,7 +26,7 @@ function BrowserEditor() {
   }
 
   return (
-    <div style={{ flex: 1, height: '100vh' }}>
+    <div style={{ height: '100vh', width: '80%' }}>
       <Editor
         height="100vh"
         defaultLanguage="javascript"

@@ -2,7 +2,9 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { io } from 'socket.io-client'
 import useFetchProjectStrcture from '../../Hooks/queries/useFetchProjectStructure'
+import useContextMenuStore from '../../store/useContextMenuStore'
 import useEditorSocketStore from '../../store/useEditorSocketStore'
+import ContextMenu from '../Shared/ContextMenu'
 import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
 import BrowserEditor from './Editor/BrowserEditor'
@@ -14,7 +16,22 @@ function Project() {
     useFetchProjectStrcture(projectId)
 
   const { setEditorSocket } = useEditorSocketStore()
-  console.log('LOGGING TREE: ', projectStructure?.projectTree)
+
+  const {
+    xCoord,
+    yCoord,
+    showContextMenu,
+    setShowContextMenu,
+    setYCoord,
+    setXCoord,
+  } = useContextMenuStore()
+
+  function handleHideContextMenu() {
+    setShowContextMenu(false)
+    setYCoord(0)
+    setXCoord(0)
+  }
+
   useEffect(() => {
     if (isPending == false) {
       const socket = io(`${import.meta.env.VITE_BASE_URL}/editor`)
@@ -27,14 +44,17 @@ function Project() {
   }
 
   return (
-    <div style={{ height: '100vh', display: 'flex' }}>
+    <div
+      style={{ height: '100vh', display: 'flex' }}
+      onClick={handleHideContextMenu}
+    >
       {isPending ? (
         <Loader fullScreen={true} />
       ) : (
         <>
           <div
             style={{
-              width: '260px',
+              width: '20%',
               overflowY: 'auto',
               borderRight: '1px solid #333',
               background: '#1e1e1e',
@@ -46,6 +66,7 @@ function Project() {
             />
           </div>
           <BrowserEditor />
+          {showContextMenu && <ContextMenu xCoord={xCoord} yCoord={yCoord} />}
         </>
       )}
     </div>
