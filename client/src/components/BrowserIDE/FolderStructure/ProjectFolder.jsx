@@ -12,6 +12,8 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
     setShowContextMenu,
     setYCoord,
     setXCoord,
+    setSelectedFolderPath,
+    setSelectedFilePath,
   } = useContextMenuStore()
   const [folderVisibility, setFolderVisibility] = useState({})
 
@@ -34,11 +36,17 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
     }
   }
 
-  function handleContextMenu(e) {
+  function handleContextMenu(e, rootDirectory, fileName = null) {
     e.preventDefault()
     setShowContextMenu(true)
     setXCoord(e.pageX)
     setYCoord(e.pageY)
+    if (rootDirectory && !fileName) {
+      setSelectedFolderPath(rootDirectory?.path)
+    } else {
+      const filePath = `${rootDirectory?.path}/${fileName}`
+      setSelectedFilePath(filePath)
+    }
   }
 
   return (
@@ -55,7 +63,7 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
             <button
               className="flex items-center gap-2 text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300 rounded-md px-2 py-1 w-full menu-dropdown-toggle"
               onClick={() => handleFolderVisibility(rootDirectory)}
-              onContextMenu={handleContextMenu}
+              onContextMenu={(e) => handleContextMenu(e, rootDirectory)}
             >
               <FolderIcon isOpen={!!folderVisibility[rootDirectory.name]} />
               <span className="truncate">{rootDirectory.name}</span>
@@ -76,7 +84,9 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
                       onDoubleClick={() =>
                         handleShowFileContents(rootDirectory, childNode.name)
                       }
-                      onContextMenu={handleContextMenu}
+                      onContextMenu={(e) =>
+                        handleContextMenu(e, rootDirectory, childNode.name)
+                      }
                     >
                       <button className="flex items-center gap-2 text-sm text-base-content/60 hover:text-base-content hover:bg-base-300 rounded-md px-2 py-1 w-full">
                         <FileIcon name={childNode.name} />

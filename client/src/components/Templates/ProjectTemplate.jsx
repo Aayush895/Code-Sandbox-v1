@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useCreateProject from '../../Hooks/mutations/useCreateProject'
-import useProjectStore from '../../store/useProjectStore'
 import Card from '../Shared/Card'
 import ErrorAlert from '../Shared/ErrorAlert'
 import Loader from '../Shared/Loader'
@@ -9,7 +8,6 @@ import Loader from '../Shared/Loader'
 function ProjectTemplate() {
   const [projectName, setprojectName] = useState('')
   const [error, setError] = useState('')
-  const { setProjectName } = useProjectStore()
   const { createProjectMutation, isProjectLoading } = useCreateProject()
 
   const navigate = useNavigate()
@@ -27,7 +25,6 @@ function ProjectTemplate() {
       return
     }
 
-    setProjectName(projectName)
     try {
       const data = await createProjectMutation(projectName)
       navigate(`/project/${data?.id}`)

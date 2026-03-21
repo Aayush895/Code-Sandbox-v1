@@ -15,6 +15,14 @@ const useContextMenuStore = create(
     setShowContextMenu: (showHideContextMenu) => {
       set({ showContextMenu: showHideContextMenu })
     },
+    selectedFolderPath: null,
+    setSelectedFolderPath: (incomingFolderPath) => {
+      set({ selectedFolderPath: incomingFolderPath })
+    },
+    selectedFilePath: null,
+    setSelectedFilePath: (incomingFilePath) => {
+      set({ selectedFilePath: incomingFilePath })
+    },
   })),
 )
 
