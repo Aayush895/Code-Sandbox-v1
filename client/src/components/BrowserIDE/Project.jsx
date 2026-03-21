@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { io } from 'socket.io-client'
@@ -24,12 +25,16 @@ function Project() {
     setShowContextMenu,
     setYCoord,
     setXCoord,
+    setSelectedFolderPath,
+    setSelectedFilePath,
   } = useContextMenuStore()
 
   function handleHideContextMenu() {
     setShowContextMenu(false)
     setYCoord(0)
     setXCoord(0)
+    setSelectedFilePath(null)
+    setSelectedFolderPath(null)
   }
 
   useEffect(() => {

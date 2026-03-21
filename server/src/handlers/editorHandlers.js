@@ -49,11 +49,12 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   // Event function / handler for deleting the file
-  async function deleteFileHandler({ filePath }) {
+  async function deleteFileHandler({ filePath, projectId }) {
     try {
       await fs.unlink(filePath);
       socket.emit('delete-file-success', {
         message: 'File was deleted successfully',
+        projectId,
       });
     } catch (error) {
       console.log('Error in deleting the file: ', error);
@@ -64,11 +65,12 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   // Event function / handler for deleting the folder
-  async function deleteFolderHandler({ folderPath }) {
+  async function deleteFolderHandler({ folderPath, projectId }) {
     try {
-      await fs.rmdir(folderPath, { recursive: true });
+      await fs.rm(folderPath, { recursive: true });
       socket.emit('delete-folder-success', {
         message: 'Folder was deleted successfully',
+        projectId,
       });
     } catch (error) {
       console.log('Error in deleting the folder: ', error);
