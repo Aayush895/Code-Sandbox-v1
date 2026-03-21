@@ -1,7 +1,7 @@
 import { useParams } from 'react-router'
 import useContextMenuStore from '../../store/useContextMenuStore'
 import useEditorSocketStore from '../../store/useEditorSocketStore'
-function ContextMenu({ xCoord, yCoord }) {
+function ContextMenu({ xCoord, yCoord, setAddNewFolder }) {
   const { editorSocket } = useEditorSocketStore()
   const { selectedFolderPath, selectedFilePath } = useContextMenuStore()
 
@@ -24,15 +24,21 @@ function ContextMenu({ xCoord, yCoord }) {
     }
   }
 
+  function handleCreateFolder() {
+    setAddNewFolder(true)
+  }
+
+  function handleCreateFile() {}
+
   return (
     <ul
       className="menu bg-base-100 rounded-box w-56 absolute shadow-lg z-50"
       style={{ top: `${yCoord}px`, left: `${xCoord}px` }}
     >
-      <li>
+      <li onClick={handleCreateFolder}>
         <p>Create Folder</p>
       </li>
-      <li>
+      <li onClick={handleCreateFile}>
         <p>Create File</p>
       </li>
       <li onClick={handleDeleteFolder}>

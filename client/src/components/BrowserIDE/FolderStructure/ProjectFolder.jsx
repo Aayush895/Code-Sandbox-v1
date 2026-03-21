@@ -2,10 +2,16 @@ import { useState } from 'react'
 import { useParams } from 'react-router'
 import useContextMenuStore from '../../../store/useContextMenuStore'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
+import AddNewFileOrFolderInput from '../../Shared/AddNewFileOrFolderInput'
 import { FileIcon } from '../../Shared/FileIcon'
 import { FolderIcon } from '../../Shared/FolderIcon'
 
-function ProjectFolder({ rootDirectory, isRoot = false }) {
+function ProjectFolder({
+  rootDirectory,
+  isRoot = false,
+  addNewFolder,
+  setAddNewFolder,
+}) {
   const { editorSocket } = useEditorSocketStore()
   const { projectId } = useParams()
   const {
@@ -55,13 +61,14 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
         <ul
           className={
             isRoot
-              ? 'menu menu-dropdown-toggle bg-base-200 h-screen w-full p-2 overflow-y-auto'
-              : 'menu menu-dropdown-toggle w-full'
+              ? 'w-full h-screen bg-base-200 overflow-y-auto p-2 select-none'
+              : 'w-full select-none'
           }
         >
-          <li>
+          <li className="list-none">
+            {/* Folder toggle button */}
             <button
-              className="flex items-center gap-2 text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300 rounded-md px-2 py-1 w-full menu-dropdown-toggle"
+              className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300 transition-colors duration-100 text-left"
               onClick={() => handleFolderVisibility(rootDirectory)}
               onContextMenu={(e) => handleContextMenu(e, rootDirectory)}
             >
@@ -69,18 +76,32 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
               <span className="truncate">{rootDirectory.name}</span>
             </button>
 
-            {/* Only render children when folder is open */}
+            {/* Children: rendered when folder is open */}
             {folderVisibility[rootDirectory.name] && (
-              <ul className="pl-3 border-l border-base-300 ml-3 menu-dropdown menu-dropdown-show">
+              <ul className="pl-3 ml-2.25 border-l border-base-300 mt-0.5 space-y-0.5">
+                {/* Input appears INSIDE the open folder, before other children */}
+                {addNewFolder && (
+                  <li className="list-none px-1 py-0.5">
+                    <AddNewFileOrFolderInput
+                      setAddNewFolder={setAddNewFolder}
+                    />
+                  </li>
+                )}
+
                 {rootDirectory.children?.map((childNode, idx) =>
                   childNode.children ? (
-                    <ProjectFolder
-                      rootDirectory={childNode}
-                      key={`${childNode.name}-${idx}`}
-                    />
+                    // Sub-folder — recursive, no extra indent wrapper needed
+                    <li key={`${childNode.name}-${idx}`} className="list-none">
+                      <ProjectFolder
+                        rootDirectory={childNode}
+                        key={`${childNode.name}-${idx}`}
+                      />
+                    </li>
                   ) : (
+                    // File row — aligned with folder rows via the same px-2 py-[3px]
                     <li
                       key={`${childNode.name}-${idx}`}
+                      className="list-none"
                       onDoubleClick={() =>
                         handleShowFileContents(rootDirectory, childNode.name)
                       }
@@ -88,7 +109,7 @@ function ProjectFolder({ rootDirectory, isRoot = false }) {
                         handleContextMenu(e, rootDirectory, childNode.name)
                       }
                     >
-                      <button className="flex items-center gap-2 text-sm text-base-content/60 hover:text-base-content hover:bg-base-300 rounded-md px-2 py-1 w-full">
+                      <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content/60 hover:text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
                         <FileIcon name={childNode.name} />
                         <span className="truncate">{childNode.name}</span>
                       </button>

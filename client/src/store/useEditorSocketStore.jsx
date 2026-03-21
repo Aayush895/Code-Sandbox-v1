@@ -37,6 +37,12 @@ const useEditorSocketStore = create(
         projectStructureSetterFn(projectStructureAfterFolderDeletion)
       })
 
+      incomingSocketObj?.on('create-folder-success', async ({ projectId }) => {
+        const projectStructureAfterFolderAddition =
+          await fetchProjectTree(projectId)
+        projectStructureSetterFn(projectStructureAfterFolderAddition)
+      })
+
       set({
         editorSocket: incomingSocketObj,
       })

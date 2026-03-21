@@ -1,3 +1,4 @@
+import fsSync from 'node:fs';
 import fs from 'node:fs/promises';
 
 function editorHandlers(socket, nameSpaceSocket) {
@@ -149,11 +150,17 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   // Event function / handler for creating a new folder
-  async function createFolderHandler({ folderPath }) {
+  async function createFolderHandler({ folderPath, projectId, newFolderName }) {
     try {
-      await fs.mkdir(folderPath);
-      socket.on('create-folder-success', {
+      if (fsSync.existsSync(`${folderPath}/${newFolderName}`)) {
+        return socket.emit('error', {
+          message: 'The folder with the given name already exists!',
+        });
+      }
+      await fs.mkdir(`${folderPath}/${newFolderName}`);
+      socket.emit('create-folder-success', {
         message: 'Folder created successfully',
+        projectId,
       });
     } catch (error) {
       console.log('Error creating the folder: ', error);

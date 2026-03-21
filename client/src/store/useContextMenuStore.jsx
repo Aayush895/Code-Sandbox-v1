@@ -23,6 +23,10 @@ const useContextMenuStore = create(
     setSelectedFilePath: (incomingFilePath) => {
       set({ selectedFilePath: incomingFilePath })
     },
+    newFolderName: null,
+    setNewFolderName: (incomingFolderName) => {
+      set({ newFolderName: incomingFolderName })
+    },
   })),
 )
 

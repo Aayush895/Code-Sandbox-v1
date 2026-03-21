@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { io } from 'socket.io-client'
 import useFetchProjectStrcture from '../../Hooks/queries/useFetchProjectStructure'
@@ -25,16 +25,14 @@ function Project() {
     setShowContextMenu,
     setYCoord,
     setXCoord,
-    setSelectedFolderPath,
-    setSelectedFilePath,
   } = useContextMenuStore()
+
+  const [addNewFolder, setAddNewFolder] = useState(false)
 
   function handleHideContextMenu() {
     setShowContextMenu(false)
     setYCoord(0)
     setXCoord(0)
-    setSelectedFilePath(null)
-    setSelectedFolderPath(null)
   }
 
   useEffect(() => {
@@ -68,10 +66,18 @@ function Project() {
             <ProjectFolder
               rootDirectory={projectStructure?.projectTree}
               isRoot={true}
+              addNewFolder={addNewFolder}
+              setAddNewFolder={setAddNewFolder}
             />
           </div>
           <BrowserEditor />
-          {showContextMenu && <ContextMenu xCoord={xCoord} yCoord={yCoord} />}
+          {showContextMenu && (
+            <ContextMenu
+              xCoord={xCoord}
+              yCoord={yCoord}
+              setAddNewFolder={setAddNewFolder}
+            />
+          )}
         </>
       )}
     </div>
