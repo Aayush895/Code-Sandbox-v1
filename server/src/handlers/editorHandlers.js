@@ -128,18 +128,17 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   // Event function / handler for creating a new file
-  async function createFileHandler({ filePath }) {
-    const isFileAlreadyPresent = await fs.stat(filePath);
-    if (isFileAlreadyPresent) {
-      socket.emit('Error', {
-        data: 'File already exists',
-      });
-    }
-
+  async function createFileHandler({ folderPath, projectId, newFileName }) {
     try {
-      await fs.writeFile(filePath);
-      socket.emit('createFileSuccess', {
-        data: 'File created successfully',
+      if (fsSync.existsSync(`${folderPath}/${newFileName}`)) {
+        return socket.emit('error', {
+          message: 'The folder with the given name already exists!',
+        });
+      }
+      await fs.writeFile(`${folderPath}/${newFileName}`, '');
+      socket.emit('create-file-success', {
+        message: 'File created successfully',
+        projectId,
       });
     } catch (error) {
       console.log('Error in creating the file: ', error);

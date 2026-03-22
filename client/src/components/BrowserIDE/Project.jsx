@@ -27,7 +27,11 @@ function Project() {
     setXCoord,
   } = useContextMenuStore()
 
-  const [addNewFolder, setAddNewFolder] = useState(false)
+  const [newEntry, setNewEntry] = useState({
+    addNewFile: false,
+    addNewFolder: false,
+    filePath: null,
+  })
 
   function handleHideContextMenu() {
     setShowContextMenu(false)
@@ -66,8 +70,8 @@ function Project() {
             <ProjectFolder
               rootDirectory={projectStructure?.projectTree}
               isRoot={true}
-              addNewFolder={addNewFolder}
-              setAddNewFolder={setAddNewFolder}
+              newEntry={newEntry}
+              setNewEntry={setNewEntry}
             />
           </div>
           <BrowserEditor />
@@ -75,7 +79,8 @@ function Project() {
             <ContextMenu
               xCoord={xCoord}
               yCoord={yCoord}
-              setAddNewFolder={setAddNewFolder}
+              newEntry={newEntry}
+              setNewEntry={setNewEntry}
             />
           )}
         </>

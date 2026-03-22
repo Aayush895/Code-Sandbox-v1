@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import useContextMenuStore from '../../store/useContextMenuStore'
 import useEditorSocketStore from '../../store/useEditorSocketStore'
 
-function AddNewFileOrFolderInput({ setAddNewFolder }) {
+function AddNewFileOrFolderInput({ newEntry, setNewEntry }) {
   const [fileOrFolderName, setFileorFolderName] = useState('')
   const { projectId } = useParams()
   const { editorSocket } = useEditorSocketStore()
@@ -16,13 +16,21 @@ function AddNewFileOrFolderInput({ setAddNewFolder }) {
 
   function handleAddNewFileOrFolder(e) {
     if (e.keyCode == 13) {
-      console.log(fileOrFolderName)
-      setAddNewFolder(false)
-      editorSocket?.emit('create-folder', {
-        folderPath: selectedFolderPath,
-        projectId,
-        newFolderName: fileOrFolderName,
-      })
+      if (newEntry?.addNewFolder) {
+        setNewEntry({ ...newEntry, addNewFolder: false })
+        editorSocket?.emit('create-folder', {
+          folderPath: selectedFolderPath,
+          projectId,
+          newFolderName: fileOrFolderName,
+        })
+      } else {
+        setNewEntry({ ...newEntry, addNewFile: false })
+        editorSocket?.emit('create-file', {
+          folderPath: selectedFolderPath,
+          projectId,
+          newFileName: fileOrFolderName,
+        })
+      }
     }
   }
 
