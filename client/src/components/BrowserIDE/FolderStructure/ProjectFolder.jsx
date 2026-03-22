@@ -9,8 +9,8 @@ import { FolderIcon } from '../../Shared/FolderIcon'
 function ProjectFolder({
   rootDirectory,
   isRoot = false,
-  addNewFolder,
-  setAddNewFolder,
+  newEntry,
+  setNewEntry,
 }) {
   const { editorSocket } = useEditorSocketStore()
   const { projectId } = useParams()
@@ -22,6 +22,10 @@ function ProjectFolder({
     setSelectedFilePath,
   } = useContextMenuStore()
   const [folderVisibility, setFolderVisibility] = useState({})
+
+  const showInput =
+    (newEntry?.addNewFolder || newEntry?.addNewFile) &&
+    newEntry?.filePath === rootDirectory?.path
 
   function handleFolderVisibility(folder) {
     setFolderVisibility({
@@ -53,6 +57,7 @@ function ProjectFolder({
       const filePath = `${rootDirectory?.path}/${fileName}`
       setSelectedFilePath(filePath)
     }
+    setNewEntry({ ...newEntry, filePath: rootDirectory?.path })
   }
 
   return (
@@ -80,10 +85,11 @@ function ProjectFolder({
             {folderVisibility[rootDirectory.name] && (
               <ul className="pl-3 ml-2.25 border-l border-base-300 mt-0.5 space-y-0.5">
                 {/* Input appears INSIDE the open folder, before other children */}
-                {addNewFolder && (
+                {showInput && (
                   <li className="list-none px-1 py-0.5">
                     <AddNewFileOrFolderInput
-                      setAddNewFolder={setAddNewFolder}
+                      newEntry={newEntry}
+                      setNewEntry={setNewEntry}
                     />
                   </li>
                 )}
@@ -95,6 +101,8 @@ function ProjectFolder({
                       <ProjectFolder
                         rootDirectory={childNode}
                         key={`${childNode.name}-${idx}`}
+                        newEntry={newEntry}
+                        setNewEntry={setNewEntry}
                       />
                     </li>
                   ) : (

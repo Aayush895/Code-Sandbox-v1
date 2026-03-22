@@ -43,6 +43,13 @@ const useEditorSocketStore = create(
         projectStructureSetterFn(projectStructureAfterFolderAddition)
       })
 
+      incomingSocketObj?.on('create-file-success', async ({ projectId }) => {
+        const projectStructureAfterFileAddition =
+          await fetchProjectTree(projectId)
+
+        projectStructureSetterFn(projectStructureAfterFileAddition)
+      })
+
       set({
         editorSocket: incomingSocketObj,
       })
