@@ -56,9 +56,11 @@ function ProjectFolder({
     setYCoord(e.pageY)
     if (rootDirectory && !fileName) {
       setSelectedFolderPath(rootDirectory?.path)
+      setSelectedFilePath(null)
     } else {
       const filePath = `${rootDirectory?.path}/${fileName}`
       setSelectedFilePath(filePath)
+      setSelectedFolderPath(null)
     }
     setNewEntry({ ...newEntry, filePath: rootDirectory?.path })
   }
