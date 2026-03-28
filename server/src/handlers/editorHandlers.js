@@ -82,19 +82,20 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   // Event function / handler for renaming the folder
-  async function renameFolderHandler({ folderPath, newFolderName }) {
+  async function renameFolderHandler({ folderPath, newFolderName, projectId }) {
     try {
       const folderPathParts = folderPath.split('/');
       const oldFolderName = folderPathParts[folderPathParts.length - 1];
       const directoryPath = folderPathParts
         .slice(0, folderPathParts.length - 1)
-        .join();
+        .join('/');
       await fs.rename(
         `${directoryPath}/${oldFolderName}`,
         `${directoryPath}/${newFolderName}`
       );
       socket.emit('rename-folder-success', {
         message: 'Folder was renamed successfully',
+        projectId,
       });
     } catch (error) {
       console.log('Error in renaming the folder: ', error);
@@ -105,19 +106,21 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   // Event function / handler for renaming the file
-  async function renameFileHandler({ filePath, newFileName }) {
+  async function renameFileHandler({ filePath, newFileName, projectId }) {
     try {
       const filePathParts = filePath.split('/');
       const oldFileName = filePathParts[filePathParts.length - 1];
       const directoryPath = filePathParts
         .slice(0, filePathParts.length - 1)
-        .join();
+        .join('/');
+
       await fs.rename(
         `${directoryPath}/${oldFileName}`,
         `${directoryPath}/${newFileName}`
       );
       socket.emit('rename-file-success', {
         message: 'File was renamed successfully',
+        projectId,
       });
     } catch (error) {
       console.log('Error in renaming the file: ', error);

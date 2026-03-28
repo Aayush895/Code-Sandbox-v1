@@ -1,7 +1,14 @@
 import { useParams } from 'react-router'
 import useContextMenuStore from '../../store/useContextMenuStore'
 import useEditorSocketStore from '../../store/useEditorSocketStore'
-function ContextMenu({ xCoord, yCoord, newEntry, setNewEntry }) {
+function ContextMenu({
+  xCoord,
+  yCoord,
+  newEntry,
+  setNewEntry,
+  renameFileOrFolder,
+  setRenameFileOrFolder,
+}) {
   const { editorSocket } = useEditorSocketStore()
   const { selectedFolderPath, selectedFilePath } = useContextMenuStore()
 
@@ -32,9 +39,29 @@ function ContextMenu({ xCoord, yCoord, newEntry, setNewEntry }) {
     setNewEntry({ ...newEntry, addNewFile: true, addNewFolder: false })
   }
 
-  function handleRenameFolder() {}
+  function handleRenameFolder() {
+    // Fetching the initial folder name that needs to be displayed inside the input
+    let folderName =
+      selectedFolderPath.split('/')[selectedFolderPath.split('/').length - 1]
+    setRenameFileOrFolder({
+      ...renameFileOrFolder,
+      renameFile: '',
+      renameFolder: folderName,
+      fileOrFolderPath: selectedFolderPath,
+    })
+  }
 
-  function handleRenameFile() {}
+  function handleRenameFile() {
+    // Fetching the initial file name that needs to be displayed inside the input
+    let fileName =
+      selectedFilePath.split('/')[selectedFilePath.split('/').length - 1]
+    setRenameFileOrFolder({
+      ...renameFileOrFolder,
+      renameFile: fileName,
+      renameFolder: '',
+      fileOrFolderPath: selectedFilePath,
+    })
+  }
 
   return (
     <ul
@@ -42,22 +69,34 @@ function ContextMenu({ xCoord, yCoord, newEntry, setNewEntry }) {
       style={{ top: `${yCoord}px`, left: `${xCoord}px` }}
     >
       <li onClick={handleCreateFolder}>
-        <p>Create Folder</p>
+        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+          <span className="truncate">Create Folder</span>
+        </button>
       </li>
       <li onClick={handleCreateFile}>
-        <p>Create File</p>
+        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+          <span className="truncate">Create File</span>
+        </button>
       </li>
       <li onClick={handleDeleteFolder}>
-        <p>Delete Folder</p>
+        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+          <span className="truncate">Delete Folder</span>
+        </button>
       </li>
       <li onClick={handleDeleteFile}>
-        <p>Delete File</p>
+        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+          <span className="truncate">Delete File</span>
+        </button>
       </li>
       <li onClick={handleRenameFolder}>
-        <p>Rename Folder</p>
+        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+          <span className="truncate">Rename Folder</span>
+        </button>
       </li>
       <li onClick={handleRenameFile}>
-        <p>Rename File</p>
+        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+          <span className="truncate">Rename File</span>
+        </button>
       </li>
     </ul>
   )
