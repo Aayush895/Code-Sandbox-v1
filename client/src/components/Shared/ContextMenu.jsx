@@ -13,6 +13,22 @@ function ContextMenu({
   const { selectedFolderPath, selectedFilePath } = useContextMenuStore()
 
   const { projectId } = useParams()
+
+  function shouldFile_FolderOptionsBeDisabled() {
+    let areFolderOptionsDisabled = false
+    let areFileOptionsDisabled = false
+
+    if (selectedFolderPath && !selectedFilePath) {
+      areFileOptionsDisabled = true
+      areFolderOptionsDisabled = false
+    } else {
+      areFileOptionsDisabled = false
+      areFolderOptionsDisabled = true
+    }
+
+    return [areFileOptionsDisabled, areFolderOptionsDisabled]
+  }
+
   function handleDeleteFolder() {
     if (editorSocket && selectedFolderPath) {
       editorSocket?.emit('delete-folder', {
@@ -69,32 +85,80 @@ function ContextMenu({
       style={{ top: `${yCoord}px`, left: `${xCoord}px` }}
     >
       <li onClick={handleCreateFolder}>
-        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+        <button
+          className={`flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content transition-colors duration-100 text-left
+          ${
+            shouldFile_FolderOptionsBeDisabled()[1]
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-base-300 cursor-pointer'
+          }`}
+          disabled={shouldFile_FolderOptionsBeDisabled()[1]}
+        >
           <span className="truncate">Create Folder</span>
         </button>
       </li>
       <li onClick={handleCreateFile}>
-        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+        <button
+          className={`flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content transition-colors duration-100 text-left
+          ${
+            shouldFile_FolderOptionsBeDisabled()[1]
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-base-300 cursor-pointer'
+          }`}
+          disabled={shouldFile_FolderOptionsBeDisabled()[1]}
+        >
           <span className="truncate">Create File</span>
         </button>
       </li>
       <li onClick={handleDeleteFolder}>
-        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+        <button
+          className={`flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content transition-colors duration-100 text-left
+          ${
+            shouldFile_FolderOptionsBeDisabled()[1]
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-base-300 cursor-pointer'
+          }`}
+          disabled={shouldFile_FolderOptionsBeDisabled()[1]}
+        >
           <span className="truncate">Delete Folder</span>
         </button>
       </li>
       <li onClick={handleDeleteFile}>
-        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+        <button
+          className={`flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content transition-colors duration-100 text-left
+          ${
+            shouldFile_FolderOptionsBeDisabled()[0]
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-base-300 cursor-pointer'
+          }`}
+          disabled={shouldFile_FolderOptionsBeDisabled()[0]}
+        >
           <span className="truncate">Delete File</span>
         </button>
       </li>
       <li onClick={handleRenameFolder}>
-        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+        <button
+          className={`flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content transition-colors duration-100 text-left
+          ${
+            shouldFile_FolderOptionsBeDisabled()[1]
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-base-300 cursor-pointer'
+          }`}
+          disabled={shouldFile_FolderOptionsBeDisabled()[1]}
+        >
           <span className="truncate">Rename Folder</span>
         </button>
       </li>
       <li onClick={handleRenameFile}>
-        <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
+        <button
+          className={`flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content transition-colors duration-100 text-left
+          ${
+            shouldFile_FolderOptionsBeDisabled()[0]
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-base-300 cursor-pointer'
+          }`}
+          disabled={shouldFile_FolderOptionsBeDisabled()[0]}
+        >
           <span className="truncate">Rename File</span>
         </button>
       </li>
