@@ -15,7 +15,7 @@ function AddNewFileOrFolderInput({ newEntry, setNewEntry }) {
   }
 
   function handleAddNewFileOrFolder(e) {
-    if (e.keyCode == 13) {
+    if (e.key == 'Enter') {
       if (newEntry?.addNewFolder) {
         setNewEntry({ ...newEntry, addNewFolder: false })
         editorSocket?.emit('create-folder', {

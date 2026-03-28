@@ -33,6 +33,12 @@ function Project() {
     filePath: null,
   })
 
+  const [renameFileOrFolder, setRenameFileOrFolder] = useState({
+    renameFile: '',
+    renameFolder: '',
+    fileOrFolderPath: null,
+  })
+
   function handleHideContextMenu() {
     setShowContextMenu(false)
     setYCoord(0)
@@ -72,6 +78,8 @@ function Project() {
               isRoot={true}
               newEntry={newEntry}
               setNewEntry={setNewEntry}
+              renameFileOrFolder={renameFileOrFolder}
+              setRenameFileOrFolder={setRenameFileOrFolder}
             />
           </div>
           <BrowserEditor />
@@ -81,6 +89,8 @@ function Project() {
               yCoord={yCoord}
               newEntry={newEntry}
               setNewEntry={setNewEntry}
+              renameFileOrFolder={renameFileOrFolder}
+              setRenameFileOrFolder={setRenameFileOrFolder}
             />
           )}
         </>

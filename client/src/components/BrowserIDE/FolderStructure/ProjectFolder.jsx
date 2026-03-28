@@ -5,12 +5,15 @@ import useEditorSocketStore from '../../../store/useEditorSocketStore'
 import AddNewFileOrFolderInput from '../../Shared/AddNewFileOrFolderInput'
 import { FileIcon } from '../../Shared/FileIcon'
 import { FolderIcon } from '../../Shared/FolderIcon'
+import RenameFileOrFolderInput from '../../Shared/RenameFileOrFolderInput'
 
 function ProjectFolder({
   rootDirectory,
   isRoot = false,
   newEntry,
   setNewEntry,
+  renameFileOrFolder,
+  setRenameFileOrFolder,
 }) {
   const { editorSocket } = useEditorSocketStore()
   const { projectId } = useParams()
@@ -78,13 +81,19 @@ function ProjectFolder({
               onContextMenu={(e) => handleContextMenu(e, rootDirectory)}
             >
               <FolderIcon isOpen={!!folderVisibility[rootDirectory.name]} />
-              <span className="truncate">{rootDirectory.name}</span>
+              {renameFileOrFolder?.renameFolder == rootDirectory.name ? (
+                <RenameFileOrFolderInput
+                  renameFileOrFolder={renameFileOrFolder}
+                  setRenameFileOrFolder={setRenameFileOrFolder}
+                />
+              ) : (
+                <span className="truncate">{rootDirectory.name}</span>
+              )}
             </button>
 
             {/* Children: rendered when folder is open */}
             {folderVisibility[rootDirectory.name] && (
               <ul className="pl-3 ml-2.25 border-l border-base-300 mt-0.5 space-y-0.5">
-                {/* Input appears INSIDE the open folder, before other children */}
                 {showInput && (
                   <li className="list-none px-1 py-0.5">
                     <AddNewFileOrFolderInput
@@ -103,6 +112,8 @@ function ProjectFolder({
                         key={`${childNode.name}-${idx}`}
                         newEntry={newEntry}
                         setNewEntry={setNewEntry}
+                        renameFileOrFolder={renameFileOrFolder}
+                        setRenameFileOrFolder={setRenameFileOrFolder}
                       />
                     </li>
                   ) : (
@@ -119,7 +130,14 @@ function ProjectFolder({
                     >
                       <button className="flex items-center gap-1.5 w-full px-2 py-0.75 rounded text-sm text-base-content/60 hover:text-base-content hover:bg-base-300 transition-colors duration-100 text-left">
                         <FileIcon name={childNode.name} />
-                        <span className="truncate">{childNode.name}</span>
+                        {renameFileOrFolder?.renameFile == childNode?.name ? (
+                          <RenameFileOrFolderInput
+                            renameFileOrFolder={renameFileOrFolder}
+                            setRenameFileOrFolder={setRenameFileOrFolder}
+                          />
+                        ) : (
+                          <span className="truncate">{childNode.name}</span>
+                        )}
                       </button>
                     </li>
                   ),
