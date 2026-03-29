@@ -2,8 +2,9 @@ import Editor from '@monaco-editor/react'
 import { useParams } from 'react-router'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
 import useEditorStore from '../../../store/useEditorStore'
+import ShowActiveFile from './ShowActiveFile'
 
-function BrowserEditor() {
+function BrowserEditor({ activeFilesArr, setActiveFilesArr }) {
   const { fileContents, activeFile } = useEditorStore()
   const { editorSocket } = useEditorSocketStore()
   const { projectId } = useParams()
@@ -27,6 +28,17 @@ function BrowserEditor() {
 
   return (
     <div style={{ height: '100vh', width: '80%' }}>
+      <div className="flex flex-row items-center overflow-x-auto overflow-y-hidden bg-[#252526] border-b border-b-[#1e1e1e] shrink-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {activeFilesArr.length > 0 &&
+          activeFilesArr.map((activeFile, idx) => (
+            <ShowActiveFile
+              activeFilePath={activeFile}
+              activeFilesArr={activeFilesArr}
+              setActiveFilesArr={setActiveFilesArr}
+              key={`${activeFile}-${idx}`}
+            />
+          ))}
+      </div>
       <Editor
         height="100vh"
         defaultLanguage="javascript"

@@ -14,6 +14,8 @@ function ProjectFolder({
   setNewEntry,
   renameFileOrFolder,
   setRenameFileOrFolder,
+  activeFilesArr,
+  setActiveFilesArr,
 }) {
   const { editorSocket } = useEditorSocketStore()
   const { projectId } = useParams()
@@ -41,6 +43,7 @@ function ProjectFolder({
   function handleShowFileContents(rootDirectory, fileName) {
     if (editorSocket) {
       const filePath = `${rootDirectory?.path}/${fileName}`
+      setActiveFilesArr([...activeFilesArr, filePath])
       const roomId = `${projectId}/${fileName}`
       editorSocket.emit('read-file', { filePath })
 
@@ -116,6 +119,8 @@ function ProjectFolder({
                         setNewEntry={setNewEntry}
                         renameFileOrFolder={renameFileOrFolder}
                         setRenameFileOrFolder={setRenameFileOrFolder}
+                        activeFilesArr={activeFilesArr}
+                        setActiveFilesArr={setActiveFilesArr}
                       />
                     </li>
                   ) : (
