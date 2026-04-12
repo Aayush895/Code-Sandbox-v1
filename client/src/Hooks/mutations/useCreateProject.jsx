@@ -3,7 +3,7 @@ import { createProject } from '../../Apis/projectApis'
 
 function useCreateProject() {
   const { isPending, isError, mutateAsync } = useMutation({
-    mutationFn: (projectName) => createProject(projectName),
+    mutationFn: (project) => createProject(project),
     onSuccess: (data) => {
       // Do Something
       console.log('on mutation success: ', data)

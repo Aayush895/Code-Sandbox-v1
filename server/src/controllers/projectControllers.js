@@ -9,6 +9,7 @@ import AppError from '../utils/AppError.js';
 export async function createProjectController(req, res, next) {
   try {
     const projectName = req.body.projectName;
+    const projectType = req.body.projectType;
 
     if (!projectName) {
       throw new AppError('Project Name not received!', 422);
@@ -17,6 +18,7 @@ export async function createProjectController(req, res, next) {
     const uniqueProjectId = uuidv4();
     const projectData = await createProjectService(
       projectName,
+      projectType,
       uniqueProjectId
     );
 

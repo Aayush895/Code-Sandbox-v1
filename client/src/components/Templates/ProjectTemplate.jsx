@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useCreateProject from '../../Hooks/mutations/useCreateProject'
+import { cardTypes } from '../../Utils/cardMappings'
 import Card from '../Shared/Card'
 import ErrorAlert from '../Shared/ErrorAlert'
 import Loader from '../Shared/Loader'
 
 function ProjectTemplate() {
-  const [projectName, setprojectName] = useState('')
+  const [project, setProject] = useState({
+    projectType: '',
+    projectName: '',
+  })
   const [error, setError] = useState('')
   const { createProjectMutation, isProjectLoading } = useCreateProject()
 
@@ -16,17 +20,17 @@ function ProjectTemplate() {
   }
 
   function handleProjectName(e) {
-    setprojectName(e.target.value)
+    setProject({ ...project, projectName: e.target.value })
   }
 
   async function handleCreateProject() {
-    if (!projectName) {
+    if (!project.projectName) {
       setError('Please provide a project name!')
       return
     }
 
     try {
-      const data = await createProjectMutation(projectName)
+      const data = await createProjectMutation(project)
       navigate(`/project/${data?.id}`)
     } catch (error) {
       console.log('Error: ', error)
@@ -47,7 +51,7 @@ function ProjectTemplate() {
       clearInterval(timerId)
     }
   }, [error])
-
+  console.log('LOGGING project: ', project)
   return (
     <div className="min-h-screen bg-base-200 py-16 px-6">
       <div className="max-w-6xl mx-auto">
@@ -62,29 +66,22 @@ function ProjectTemplate() {
         {/* Template Grid */}
         <div className="w-[60%] flex items-center mx-auto flex-col">
           {/* React Template (Selected Example) */}
-          <Card
-            cardTitle="React App"
-            cardDesc="Modern React application with Vite, hot reload, and component
-              development environment"
-            cardBadges={['React 18', 'Vite', 'Hot Reload', 'JSX']}
-            cardIcon="⚛️"
-          />
-
-          <Card
-            cardTitle="Express API"
-            cardDesc="Node.js backend with Express framework, ready for REST API
-                development."
-            cardBadges={['Node.js', 'Express', 'REST API', 'Middleware']}
-            cardIcon="🚀"
-          />
-
-          <Card
-            cardTitle="React + Express"
-            cardDesc="Full-stack setup with React frontend and Express backend,
-                pre-configured to work together."
-            cardBadges={['Full Stack', 'React', 'Express', 'Proxy']}
-            cardIcon="🔗"
-          />
+          {cardTypes.length > 0 &&
+            cardTypes.map((card) => {
+              return (
+                <Card
+                  key={card.id}
+                  type={card.type}
+                  cardTitle={card.cardTitle}
+                  cardDesc={card.cardDesc}
+                  cardBadges={card.cardBadges}
+                  cardIcon={card.cardIcon}
+                  project={project}
+                  setProject={setProject}
+                  isSelected={project?.projectType == card.type}
+                />
+              )
+            })}
         </div>
 
         {/* Project Name Section */}
@@ -99,7 +96,7 @@ function ProjectTemplate() {
               type="text"
               placeholder="my-awesome-project"
               className="input input-bordered w-full mx-3"
-              value={projectName}
+              value={project.projectName}
               onChange={handleProjectName}
             />
           </div>
