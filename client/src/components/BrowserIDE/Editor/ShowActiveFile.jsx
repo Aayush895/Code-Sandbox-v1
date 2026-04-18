@@ -1,6 +1,7 @@
 import { RxCross2 } from 'react-icons/rx'
 import { useParams } from 'react-router'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
+import useEditorStore from '../../../store/useEditorStore'
 
 // TODO: Fix the bug where when we close the active file it's content should shift to the next recent file and it should automatically show that files content
 function ShowActiveFile({
@@ -11,16 +12,51 @@ function ShowActiveFile({
 }) {
   const { projectId } = useParams()
   const { editorSocket } = useEditorSocketStore()
+  const { setActiveFile, setFileContents } = useEditorStore()
 
   const fileName =
     activeFilePath.split('/')[activeFilePath.split('/').length - 1]
 
-  function handleActiveFileRemoval() {
+  function handleActiveFileRemoval(e) {
+    e.stopPropagation()
+    let removedFilePath = activeFilePath
     const newActiveFilesArrAfterRemoval = activeFilesArr.filter(
       (activeFile) => {
         return activeFilePath != activeFile
       },
     )
+    setActiveFile(
+      newActiveFilesArrAfterRemoval[newActiveFilesArrAfterRemoval.length - 1],
+    )
+    let prevRoomId = `${projectId}/${removedFilePath.split('/')[removedFilePath.split('/').length - 1]}`
+
+    if (editorSocket) {
+      editorSocket.emit('leave-room', { prevRoomId })
+      if (newActiveFilesArrAfterRemoval.length > 0) {
+        editorSocket.emit('read-file', {
+          filePath:
+            newActiveFilesArrAfterRemoval[
+              newActiveFilesArrAfterRemoval.length - 1
+            ],
+        })
+      } else {
+        setFileContents('// Welcome to the code playground')
+      }
+    }
+
+    if (newActiveFilesArrAfterRemoval.length > 0) {
+      let fileName =
+        newActiveFilesArrAfterRemoval[
+          newActiveFilesArrAfterRemoval.length - 1
+        ].split('/')[
+          newActiveFilesArrAfterRemoval[
+            newActiveFilesArrAfterRemoval.length - 1
+          ].split('/').length - 1
+        ]
+      setFileExtension(fileName.split('.')[fileName.split('.').length - 1])
+    } else {
+      setFileExtension('js')
+    }
 
     setActiveFilesArr(newActiveFilesArrAfterRemoval)
   }
