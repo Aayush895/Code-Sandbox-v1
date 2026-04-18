@@ -41,6 +41,8 @@ function Project() {
 
   const [activeFilesArr, setActiveFilesArr] = useState([])
 
+  const [fileExtension, setFileExtension] = useState('')
+
   function handleHideContextMenu() {
     setShowContextMenu(false)
     setYCoord(0)
@@ -84,9 +86,15 @@ function Project() {
               setRenameFileOrFolder={setRenameFileOrFolder}
               activeFilesArr={activeFilesArr}
               setActiveFilesArr={setActiveFilesArr}
+              setFileExtension={setFileExtension}
             />
           </div>
-          <BrowserEditor activeFilesArr={activeFilesArr} setActiveFilesArr={setActiveFilesArr}/>
+          <BrowserEditor
+            activeFilesArr={activeFilesArr}
+            setActiveFilesArr={setActiveFilesArr}
+            fileExtension={fileExtension}
+            setFileExtension={setFileExtension}
+          />
           {showContextMenu && (
             <ContextMenu
               xCoord={xCoord}

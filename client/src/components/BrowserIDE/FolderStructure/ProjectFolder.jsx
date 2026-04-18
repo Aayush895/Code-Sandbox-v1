@@ -16,6 +16,7 @@ function ProjectFolder({
   setRenameFileOrFolder,
   activeFilesArr,
   setActiveFilesArr,
+  setFileExtension,
 }) {
   const { editorSocket } = useEditorSocketStore()
   const { projectId } = useParams()
@@ -41,6 +42,8 @@ function ProjectFolder({
 
   // Below function parses the file and shows the contents of the file on the editor
   function handleShowFileContents(rootDirectory, fileName) {
+    let extension = fileName.split('.');
+    setFileExtension(extension[extension.length - 1])
     if (editorSocket) {
       const filePath = `${rootDirectory?.path}/${fileName}`
       setActiveFilesArr([...activeFilesArr, filePath])
@@ -121,6 +124,7 @@ function ProjectFolder({
                         setRenameFileOrFolder={setRenameFileOrFolder}
                         activeFilesArr={activeFilesArr}
                         setActiveFilesArr={setActiveFilesArr}
+                        setFileExtension={setFileExtension}
                       />
                     </li>
                   ) : (

@@ -3,7 +3,12 @@ import { useParams } from 'react-router'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
 
 // TODO: Fix the bug where when we close the active file it's content should shift to the next recent file and it should automatically show that files content
-function ShowActiveFile({ activeFilePath, activeFilesArr, setActiveFilesArr }) {
+function ShowActiveFile({
+  activeFilePath,
+  activeFilesArr,
+  setActiveFilesArr,
+  setFileExtension,
+}) {
   const { projectId } = useParams()
   const { editorSocket } = useEditorSocketStore()
 
@@ -21,11 +26,13 @@ function ShowActiveFile({ activeFilePath, activeFilesArr, setActiveFilesArr }) {
   }
 
   function handleFetchFileContents() {
+    let extension = fileName.split('.')
     if (editorSocket) {
       const roomId = `${projectId}/${fileName}`
       editorSocket.emit('read-file', { filePath: activeFilePath })
       editorSocket.emit('join-room', { roomId })
     }
+    setFileExtension(extension[extension.length - 1])
   }
 
   return (
