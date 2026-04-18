@@ -8,11 +8,23 @@ function editorHandlers(socket, nameSpaceSocket) {
   async function joinRoom({ roomId }) {
     try {
       socket.join(roomId);
-      console.log('The User is connected to room: ', roomId);
+      console.log(`The User - ${socket.id} is connected to room: ${roomId}`);
     } catch (error) {
       console.log('Error in joining the room: ', error);
       socket.emit('Error', {
         message: 'Error in joining the room: ',
+      });
+    }
+  }
+
+  async function leaveRoom({ prevRoomId }) {
+    try {
+      socket.leave(prevRoomId);
+      console.log(`The User - ${socket.id} left the room: ${prevRoomId}`);
+    } catch (error) {
+      console.log('Error in leaving the room: ', error);
+      socket.emit('Error', {
+        message: 'Error in leaving the room',
       });
     }
   }
@@ -173,6 +185,7 @@ function editorHandlers(socket, nameSpaceSocket) {
   }
 
   socket.on('join-room', joinRoom);
+  socket.on('leave-room', leaveRoom);
   socket.on('read-file', readFileHandler);
   socket.on('write-file', writeFileHandler);
   socket.on('delete-file', deleteFileHandler);

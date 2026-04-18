@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router'
 import useContextMenuStore from '../../../store/useContextMenuStore'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
+import useEditorStore from '../../../store/useEditorStore'
 import AddNewFileOrFolderInput from '../../Shared/AddNewFileOrFolderInput'
 import { FileIcon } from '../../Shared/FileIcon'
 import { FolderIcon } from '../../Shared/FolderIcon'
@@ -19,6 +20,7 @@ function ProjectFolder({
   setFileExtension,
 }) {
   const { editorSocket } = useEditorSocketStore()
+  const { activeFile } = useEditorStore()
   const { projectId } = useParams()
   const {
     setShowContextMenu,
@@ -42,7 +44,7 @@ function ProjectFolder({
 
   // Below function parses the file and shows the contents of the file on the editor
   function handleShowFileContents(rootDirectory, fileName) {
-    let extension = fileName.split('.');
+    let extension = fileName.split('.')
     setFileExtension(extension[extension.length - 1])
     if (editorSocket) {
       const filePath = `${rootDirectory?.path}/${fileName}`
@@ -51,6 +53,11 @@ function ProjectFolder({
       editorSocket.emit('read-file', { filePath })
 
       // After the client emits read-file and the contents are displayed, make the client join the room
+      if (activeFile) {
+        let fileName = activeFile.split('/')[activeFile.split('/').length - 1]
+        let prevRoomId = `${projectId}/${fileName}`
+        editorSocket.emit('leave-room', { prevRoomId })
+      }
       editorSocket.emit('join-room', { roomId })
     }
   }
