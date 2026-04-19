@@ -10,6 +10,7 @@ import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
 import BrowserEditor from './Editor/BrowserEditor'
 import ProjectFolder from './FolderStructure/ProjectFolder'
+import WebTerminal from './WebTerminal/WebTerminal'
 
 function Project() {
   const { projectId } = useParams()
@@ -89,12 +90,28 @@ function Project() {
               setFileExtension={setFileExtension}
             />
           </div>
-          <BrowserEditor
-            activeFilesArr={activeFilesArr}
-            setActiveFilesArr={setActiveFilesArr}
-            fileExtension={fileExtension}
-            setFileExtension={setFileExtension}
-          />
+
+          {/* RIGHT SIDE */}
+          <div
+            style={{
+              width: '80%',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {/* Editor */}
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <BrowserEditor
+                activeFilesArr={activeFilesArr}
+                setActiveFilesArr={setActiveFilesArr}
+                fileExtension={fileExtension}
+                setFileExtension={setFileExtension}
+              />
+            </div>
+
+            {/* Terminal at bottom */}
+            <WebTerminal />
+          </div>
           {showContextMenu && (
             <ContextMenu
               xCoord={xCoord}
