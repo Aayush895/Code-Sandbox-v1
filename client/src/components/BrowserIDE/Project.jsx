@@ -52,7 +52,11 @@ function Project() {
 
   useEffect(() => {
     if (isPending == false) {
-      const socket = io(`${import.meta.env.VITE_BASE_URL}/editor`)
+      const socket = io(`${import.meta.env.VITE_BASE_URL}/editor`, {
+        query: {
+          projectId: projectId,
+        },
+      })
       setEditorSocket(socket)
     }
   }, [isPending])
@@ -91,7 +95,6 @@ function Project() {
             />
           </div>
 
-          {/* RIGHT SIDE */}
           <div
             style={{
               width: '80%',
@@ -99,7 +102,6 @@ function Project() {
               flexDirection: 'column',
             }}
           >
-            {/* Editor */}
             <div style={{ flex: 1, overflow: 'hidden' }}>
               <BrowserEditor
                 activeFilesArr={activeFilesArr}
@@ -109,7 +111,6 @@ function Project() {
               />
             </div>
 
-            {/* Terminal at bottom */}
             <WebTerminal />
           </div>
           {showContextMenu && (

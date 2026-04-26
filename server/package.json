@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chokidar": "^5.0.0",
     "cors": "^2.8.6",
     "directory-tree": "^3.6.0",
     "dockerode": "^4.0.10",
@@ -8,7 +9,8 @@
     "express": "^5.2.1",
     "nodemon": "^3.1.11",
     "socket.io": "^4.8.3",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "ws": "^8.20.0"
   },
   "name": "server",
   "version": "1.0.0",

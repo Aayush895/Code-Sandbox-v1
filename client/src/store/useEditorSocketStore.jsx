@@ -64,6 +64,13 @@ const useEditorSocketStore = create(
         projectStructureSetterFn(projectStructureAfterRenamingFolder)
       })
 
+      incomingSocketObj?.on('file:change', async ({ projectId }) => {
+        const projectStructureAfterSomeFileChanges =
+          await fetchProjectTree(projectId)
+
+        projectStructureSetterFn(projectStructureAfterSomeFileChanges)
+      })
+
       set({
         editorSocket: incomingSocketObj,
       })

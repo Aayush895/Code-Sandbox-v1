@@ -1,0 +1,5 @@
+{
+  "ignore": ["projects/*", "projects/**/*"],
+  "watch": ["src"],
+  "ext": "js,mjs"
+}

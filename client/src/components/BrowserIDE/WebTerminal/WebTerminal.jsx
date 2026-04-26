@@ -1,10 +1,16 @@
+import { AttachAddon } from '@xterm/addon-attach'
 import { FitAddon } from '@xterm/addon-fit'
 import { Terminal } from '@xterm/xterm'
 import { useRef, useEffect } from 'react'
 import '@xterm/xterm/css/xterm.css'
+import { useParams } from 'react-router'
+import { useTerminalStore } from '../../../store/useTerminalStore'
 
 function WebTerminal() {
   const terminalRef = useRef(null)
+  const { projectId } = useParams()
+  const { setTerminalSocket } = useTerminalStore()
+
   useEffect(() => {
     const terminalInstance = new Terminal({
       cursorBlink: true,
@@ -29,8 +35,20 @@ function WebTerminal() {
     terminalInstance.open(terminalRef.current)
     fitAddOn.fit()
 
+    const ws = new WebSocket(
+      `${import.meta.env.VITE_TERMINAL_SOCKET_URL}?projectId=${projectId}`,
+    )
+
+    setTerminalSocket(ws)
+
+    ws.onopen = () => {
+      const attachAddon = new AttachAddon(ws)
+      terminalInstance.loadAddon(attachAddon)
+    }
+
     return () => {
       terminalInstance.dispose()
+      ws.close()
     }
   }, [])
 
