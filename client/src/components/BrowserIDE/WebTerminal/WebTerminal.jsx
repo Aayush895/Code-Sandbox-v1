@@ -8,10 +8,15 @@ import { useTerminalStore } from '../../../store/useTerminalStore'
 
 function WebTerminal() {
   const terminalRef = useRef(null)
+  const startedRef = useRef(false)
   const { projectId } = useParams()
   const { setTerminalSocket } = useTerminalStore()
 
   useEffect(() => {
+    if (startedRef.current) return
+    if (!terminalRef.current) return
+
+    startedRef.current = true
     const terminalInstance = new Terminal({
       cursorBlink: true,
       cursorWidth: '15px',
@@ -47,6 +52,7 @@ function WebTerminal() {
     }
 
     return () => {
+      startedRef.current = false
       terminalInstance.dispose()
       ws.close()
     }

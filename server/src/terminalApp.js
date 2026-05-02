@@ -40,13 +40,8 @@ terminalWebSocket.on('connection', async (socket, req) => {
     const container = await handleContainerCreation(projectId);
     handleTerminalCreation(container, socket);
 
-    socket.on('close', async () => {
-      try {
-        console.log(`Client disconnected, removing container for ${projectId}`);
-        await container.remove({ force: true });
-      } catch (err) {
-        console.error('Error removing container on disconnect:', err);
-      }
+    socket.on('close', () => {
+      console.log(`Terminal session closed for ${projectId}`);
     });
   } catch (error) {
     console.error('Failed to create container:', error);
