@@ -153,3 +153,26 @@ export async function handleContainerRemoval(projectId) {
     containerRegistry.delete(projectId);
   }
 }
+
+export async function getContainerPort(containerName) {
+  const filteredContainers = await docker.listContainers({
+    filters: { name: [containerName] },
+  });
+
+  if (filteredContainers.length === 0) return undefined;
+
+  const containerInfo = await docker
+    .getContainer(filteredContainers[0].Id)
+    .inspect();
+  try {
+    return {
+      ports: [
+        containerInfo?.NetworkSettings?.Ports['5173/tcp'][0].HostPort,
+        containerInfo?.NetworkSettings?.Ports['3000/tcp'][0].HostPort,
+      ],
+    };
+  } catch (error) {
+    console.log('port not present: ', error);
+    return undefined;
+  }
+}

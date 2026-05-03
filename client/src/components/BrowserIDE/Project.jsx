@@ -10,6 +10,7 @@ import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
 import BrowserEditor from './Editor/BrowserEditor'
 import ProjectFolder from './FolderStructure/ProjectFolder'
+import WebBrowser from './WebBrowser/WebBrowser'
 import WebTerminal from './WebTerminal/WebTerminal'
 
 function Project() {
@@ -113,6 +114,7 @@ function Project() {
 
             <WebTerminal />
           </div>
+          <WebBrowser />
           {showContextMenu && (
             <ContextMenu
               xCoord={xCoord}

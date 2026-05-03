@@ -1,6 +1,8 @@
 import fsSync from 'node:fs';
 import fs from 'node:fs/promises';
 
+import { getContainerPort } from '../containers/handleContainerCreation.js';
+
 function editorHandlers(socket, nameSpaceSocket) {
   // Room Id: projectId + file
 
@@ -184,6 +186,22 @@ function editorHandlers(socket, nameSpaceSocket) {
     }
   }
 
+  // Get container port for project
+  async function fetchContainerPort({ containerName }) {
+    try {
+      const { ports } = await getContainerPort(containerName);
+      socket.emit('fetch-port-success', {
+        ports,
+        message: 'Port for the project was fetched successfully',
+      });
+    } catch (error) {
+      console.log('Error in fetching port: ', error);
+      socket.emit('error', {
+        data: 'Error in fetching the port',
+      });
+    }
+  }
+
   socket.on('join-room', joinRoom);
   socket.on('leave-room', leaveRoom);
   socket.on('read-file', readFileHandler);
@@ -194,6 +212,7 @@ function editorHandlers(socket, nameSpaceSocket) {
   socket.on('rename-file', renameFileHandler);
   socket.on('create-file', createFileHandler);
   socket.on('create-folder', createFolderHandler);
+  socket.on('fetch-port', fetchContainerPort);
 }
 
 export default editorHandlers;

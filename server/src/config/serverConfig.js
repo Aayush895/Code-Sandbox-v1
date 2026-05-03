@@ -14,10 +14,10 @@ export function createExpressApp(projectName) {
 
 export function createReactExpressApp(isClient) {
   if (isClient) {
-    return createReactCommand
+    return createReactCommand;
   }
 
-  return createExpressApp
+  return createExpressApp;
 }
 
 export const CREATE_EXPRESS_APP = '';

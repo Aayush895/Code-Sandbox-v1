@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { fetchProjectTree } from '../Apis/projectApis'
 import useEditorStore from './useEditorStore'
+import { usePortStore } from './usePortStore'
 import useProjectStore from './useProjectStore'
 
 const useEditorSocketStore = create(
@@ -13,6 +14,7 @@ const useEditorSocketStore = create(
       const projectStructureSetterFn =
         useProjectStore.getState().setProjectStructure
 
+      const portSetterFn = usePortStore.getState().setPort
       incomingSocketObj?.on('read-file-success', ({ fileData, activeFile }) => {
         activeFileSetterFn(activeFile)
         fileContentsSetterFn(fileData)
@@ -70,6 +72,13 @@ const useEditorSocketStore = create(
 
         projectStructureSetterFn(projectStructureAfterSomeFileChanges)
       })
+
+      incomingSocketObj?.on(
+        'fetch-port-success',
+        async ({ ports}) => {
+          portSetterFn(ports[0])
+        },
+      )
 
       set({
         editorSocket: incomingSocketObj,
