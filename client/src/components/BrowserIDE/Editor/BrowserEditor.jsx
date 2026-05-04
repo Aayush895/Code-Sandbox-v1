@@ -35,7 +35,7 @@ function BrowserEditor({
   function getLanguage() {
     return EXTENSION_TO_LANGUAGE[fileExtension]
   }
-  console.log('File Contents: ', fileContents)
+  
   return (
     <div style={{ height: '100vh', width: '100%' }}>
       <div className="flex flex-row items-center overflow-x-auto overflow-y-hidden bg-[#252526] border-b border-b-[#1e1e1e] shrink-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">

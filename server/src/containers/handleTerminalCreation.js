@@ -1,20 +1,20 @@
-export function handleTerminalCreation(container, terminalSocket) {
-  container.exec(
+export async function handleTerminalCreation(container, terminalSocket) {
+  await container.exec(
     {
-      Cmd: ['bash', '-i'],
+      Cmd: ['/bin/bash'],
       AttachStdin: true,
       AttachStdout: true,
       AttachStderr: true,
       Tty: true,
       User: 'sandbox',
     },
-    function (err, exec) {
+    async function (err, exec) {
       if (err) {
         console.log('Error in executing the container: ', err);
         return;
       }
 
-      exec.start({ hijack: true }, function (err, stream) {
+      await exec.start({ hijack: true }, function (err, stream) {
         if (err) {
           console.log('Error while starting container exec: ', err);
           return;
@@ -23,7 +23,11 @@ export function handleTerminalCreation(container, terminalSocket) {
         processStreamOutput(stream, terminalSocket);
 
         terminalSocket.on('message', (data) => {
-          stream.write(data);
+          if (typeof data === 'string') {
+            stream.write(Buffer.from(data));
+          } else {
+            stream.write(data);
+          }
         });
       });
     }

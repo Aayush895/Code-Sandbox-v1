@@ -4,7 +4,7 @@ import cors from 'cors';
 import express from 'express';
 import { WebSocketServer } from 'ws';
 
-import { handleContainerCreation } from './containers/handleContainerCreation.js';
+import { handleContainerCreate } from './containers/handleContainerCreation.js';
 import { handleTerminalCreation } from './containers/handleTerminalCreation.js';
 
 const app = express();
@@ -37,8 +37,8 @@ terminalWebSocket.on('connection', async (socket, req) => {
   }
 
   try {
-    const container = await handleContainerCreation(projectId);
-    handleTerminalCreation(container, socket);
+    const container = await handleContainerCreate(projectId);
+    await handleTerminalCreation(container, socket);
 
     socket.on('close', () => {
       console.log(`Terminal session closed for ${projectId}`);
