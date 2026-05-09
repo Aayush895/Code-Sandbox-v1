@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Allotment } from 'allotment'
+import 'allotment/dist/style.css'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { io } from 'socket.io-client'
@@ -52,13 +54,17 @@ function Project() {
   }
 
   useEffect(() => {
-    if (isPending == false) {
+    if (!isPending) {
       const socket = io(`${import.meta.env.VITE_BASE_URL}/editor`, {
         query: {
-          projectId: projectId,
+          projectId,
         },
       })
       setEditorSocket(socket)
+
+      return () => {
+        socket.disconnect()
+      }
     }
   }, [isPending])
 
@@ -68,53 +74,85 @@ function Project() {
 
   return (
     <div
-      style={{ height: '100vh', display: 'flex' }}
+      style={{
+        height: '100vh',
+        width: '100vw',
+        background: '#1e1e1e',
+      }}
       onClick={handleHideContextMenu}
     >
       {isPending ? (
         <Loader fullScreen={true} />
       ) : (
         <>
-          <div
-            style={{
-              width: '20%',
-              overflowY: 'auto',
-              borderRight: '1px solid #333',
-              background: '#1e1e1e',
-            }}
-          >
-            <ProjectFolder
-              rootDirectory={projectStructure?.projectTree}
-              isRoot={true}
-              newEntry={newEntry}
-              setNewEntry={setNewEntry}
-              renameFileOrFolder={renameFileOrFolder}
-              setRenameFileOrFolder={setRenameFileOrFolder}
-              activeFilesArr={activeFilesArr}
-              setActiveFilesArr={setActiveFilesArr}
-              setFileExtension={setFileExtension}
-            />
-          </div>
+          <Allotment defaultSizes={[20, 60, 20]}>
+            <Allotment.Pane minSize={200} preferredSize={260}>
+              <div
+                style={{
+                  height: '100%',
+                  overflowY: 'auto',
+                  borderRight: '1px solid #333',
+                  background: '#1e1e1e',
+                }}
+              >
+                <ProjectFolder
+                  rootDirectory={projectStructure?.projectTree}
+                  isRoot={true}
+                  newEntry={newEntry}
+                  setNewEntry={setNewEntry}
+                  renameFileOrFolder={renameFileOrFolder}
+                  setRenameFileOrFolder={setRenameFileOrFolder}
+                  activeFilesArr={activeFilesArr}
+                  setActiveFilesArr={setActiveFilesArr}
+                  setFileExtension={setFileExtension}
+                />
+              </div>
+            </Allotment.Pane>
 
-          <div
-            style={{
-              width: '80%',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <div style={{ flex: 1, overflow: 'hidden' }}>
-              <BrowserEditor
-                activeFilesArr={activeFilesArr}
-                setActiveFilesArr={setActiveFilesArr}
-                fileExtension={fileExtension}
-                setFileExtension={setFileExtension}
-              />
-            </div>
+            <Allotment.Pane minSize={400}>
+              <Allotment vertical defaultSizes={[75, 25]}>
+                <Allotment.Pane minSize={200}>
+                  <div
+                    style={{
+                      height: '100%',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <BrowserEditor
+                      activeFilesArr={activeFilesArr}
+                      setActiveFilesArr={setActiveFilesArr}
+                      fileExtension={fileExtension}
+                      setFileExtension={setFileExtension}
+                    />
+                  </div>
+                </Allotment.Pane>
 
-            <WebTerminal />
-          </div>
-          <WebBrowser />
+                <Allotment.Pane minSize={120} maxSize={350} preferredSize={220}>
+                  <div
+                    style={{
+                      height: '100%',
+                      borderTop: '1px solid #333',
+                    }}
+                  >
+                    <WebTerminal />
+                  </div>
+                </Allotment.Pane>
+              </Allotment>
+            </Allotment.Pane>
+
+            <Allotment.Pane minSize={300} preferredSize={450}>
+              <div
+                style={{
+                  height: '100%',
+                  borderLeft: '1px solid #333',
+                  overflow: 'hidden',
+                }}
+              >
+                <WebBrowser />
+              </div>
+            </Allotment.Pane>
+          </Allotment>
+
           {showContextMenu && (
             <ContextMenu
               xCoord={xCoord}
@@ -130,4 +168,5 @@ function Project() {
     </div>
   )
 }
+
 export default Project

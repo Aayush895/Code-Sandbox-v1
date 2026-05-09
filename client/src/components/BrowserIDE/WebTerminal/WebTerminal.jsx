@@ -38,7 +38,9 @@ function WebTerminal() {
     const fitAddOn = new FitAddon()
     terminalInstance.loadAddon(fitAddOn)
     terminalInstance.open(terminalRef.current)
-    fitAddOn.fit()
+    setTimeout(() => {
+      fitAddOn.fit()
+    }, 0)
 
     const ws = new WebSocket(
       `${import.meta.env.VITE_TERMINAL_SOCKET_URL}?projectId=${projectId}`,
@@ -58,6 +60,12 @@ function WebTerminal() {
     }
   }, [])
 
-  return <div ref={terminalRef} className="terminal h-[25vh] overflow-auto" />
+  return (
+  <div
+    ref={terminalRef}
+    className="terminal w-full h-full"
+    style={{ overflow: 'hidden' }}
+  />
+)
 }
 export default WebTerminal

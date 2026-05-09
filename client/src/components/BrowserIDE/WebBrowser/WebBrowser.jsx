@@ -15,11 +15,9 @@ function WebBrowser() {
   useEffect(() => {
     if (!editorSocket) return
 
-    if (!ports?.vite && !ports?.express) {
-      editorSocket.emit('fetch-port', {
-        projectId,
-      })
-    }
+    editorSocket.emit('fetch-port', {
+      projectId,
+    })
   }, [editorSocket, projectId, ports])
 
   const port =

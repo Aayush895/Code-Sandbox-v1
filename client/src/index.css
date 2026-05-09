@@ -2,3 +2,7 @@
 @plugin "daisyui" {
   themes: all;
 }
+
+.terminal .xterm-viewport {
+  overflow-y: auto;
+}
