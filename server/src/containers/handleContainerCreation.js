@@ -110,7 +110,7 @@ export async function getContainerPorts(projectId) {
   };
 
   return {
-    vite: getHostPort('5173/tcp'),
+    react: getHostPort('5173/tcp'),
     express: getHostPort('3000/tcp'),
   };
 }

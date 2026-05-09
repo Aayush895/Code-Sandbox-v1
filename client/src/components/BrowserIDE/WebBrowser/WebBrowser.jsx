@@ -10,7 +10,7 @@ function WebBrowser() {
   const { projectId } = useParams()
   const { editorSocket } = useEditorSocketStore()
 
-  const { ports, activePreview, setActivePreview } = usePortStore()
+  const { ports, projectTypeIdentification } = usePortStore()
 
   useEffect(() => {
     if (!editorSocket) return
@@ -18,13 +18,23 @@ function WebBrowser() {
     editorSocket.emit('fetch-port', {
       projectId,
     })
-  }, [editorSocket, projectId, ports])
+  }, [editorSocket, ports])
 
-  const port =
-    activePreview === 'express' ? ports?.express : ports?.vite || ports?.express
+  let port = null
+  if (projectTypeIdentification != null) {
+    if (projectTypeIdentification == 'react') {
+      port = ports.react
+    } else {
+      port = ports.express
+    }
+  }
 
   if (!port) {
-    return <span className="loading loading-spinner loading-xl"></span>
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <span className="loading loading-spinner loading-xl"></span>
+      </div>
+    )
   }
 
   const url = `http://${window.location.hostname}:${port}`
@@ -36,30 +46,8 @@ function WebBrowser() {
   }
 
   return (
-    <div>
-      {ports?.vite && ports?.express && (
-        <div className="flex gap-2 mb-2">
-          <button
-            className={`btn btn-sm ${
-              activePreview === 'vite' ? 'btn-primary' : 'btn-ghost'
-            }`}
-            onClick={() => setActivePreview('vite')}
-          >
-            Frontend
-          </button>
-
-          <button
-            className={`btn btn-sm ${
-              activePreview === 'express' ? 'btn-primary' : 'btn-ghost'
-            }`}
-            onClick={() => setActivePreview('express')}
-          >
-            Backend
-          </button>
-        </div>
-      )}
-
-      <div className="input flex items-center gap-2">
+    <div className="flex flex-col w-full">
+      <div className="input flex items-center gap-2 w-full">
         <IoReloadSharp
           onClick={handleRefresh}
           style={{ cursor: 'pointer' }}
@@ -70,7 +58,7 @@ function WebBrowser() {
           type="text"
           value={url}
           readOnly
-          className="w-full bg-transparent outline-none"
+          className="flex-1 bg-transparent outline-none"
         />
       </div>
 

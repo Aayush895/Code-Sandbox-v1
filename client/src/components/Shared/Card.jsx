@@ -1,3 +1,5 @@
+import { usePortStore } from '../../store/usePortStore'
+
 function Card({
   cardTitle,
   cardDesc,
@@ -8,8 +10,11 @@ function Card({
   project,
   isSelected,
 }) {
+  const { setProjectTypeIdentification } = usePortStore()
+
   function handleProjectType() {
     setProject({ ...project, projectType: type })
+    setProjectTypeIdentification(type)
   }
 
   return (

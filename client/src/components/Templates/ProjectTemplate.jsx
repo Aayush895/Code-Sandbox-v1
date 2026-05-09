@@ -28,7 +28,6 @@ function ProjectTemplate() {
       setError('Please provide a project name!')
       return
     }
-
     try {
       const data = await createProjectMutation(project)
       navigate(`/project/${data?.id}`)

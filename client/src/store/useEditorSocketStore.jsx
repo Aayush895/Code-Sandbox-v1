@@ -13,8 +13,8 @@ const useEditorSocketStore = create(
       const fileContentsSetterFn = useEditorStore.getState().setFileContents
       const projectStructureSetterFn =
         useProjectStore.getState().setProjectStructure
-
       const setPorts = usePortStore.getState().setPorts
+
       incomingSocketObj?.on('read-file-success', ({ fileData, activeFile }) => {
         activeFileSetterFn(activeFile)
         fileContentsSetterFn(fileData)
@@ -74,16 +74,10 @@ const useEditorSocketStore = create(
       })
 
       incomingSocketObj?.on('fetch-port-success', ({ ports }) => {
-        // New backend shape: ports = { vite: "123", express: "456" }
-        // Backward-compat: if ports is array, map [0] -> vite, [1] -> express
-        if (Array.isArray(ports)) {
-          setPorts({ vite: ports[0] ?? null, express: ports[1] ?? null })
-          return
-        }
-
+        console.log('fetch-port-success received:', ports)
         setPorts({
-          vite: ports?.vite ?? null,
-          express: ports?.express ?? null,
+          react: ports?.react,
+          express: ports?.express
         })
       })
 
