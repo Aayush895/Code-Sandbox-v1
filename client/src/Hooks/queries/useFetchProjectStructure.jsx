@@ -9,6 +9,7 @@ function useFetchProjectStrcture(projectId) {
   const {
     isPending,
     isError,
+    error,
     data: fetchedProjectTreeData,
   } = useQuery({
     queryKey: [projectId],
@@ -21,7 +22,7 @@ function useFetchProjectStrcture(projectId) {
     }
   }, [fetchedProjectTreeData])
 
-  return { projectStructure, isPending, isError }
+  return { projectStructure, isPending, isError, error }
 }
 
 export default useFetchProjectStrcture

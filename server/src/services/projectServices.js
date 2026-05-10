@@ -8,7 +8,6 @@ import path from 'path';
 import {
   createExpressApp,
   createReactCommand,
-  createReactExpressApp,
 } from '../config/serverConfig.js';
 import AppError from '../utils/AppError.js';
 
@@ -24,48 +23,6 @@ async function setupSingleProject(directoryPath, projectType, projectName) {
     exec(
       projectCreationCommand(projectName),
       { cwd: directoryPath },
-      function (error, stdout, stderr) {
-        if (error) {
-          reject(
-            new AppError(`Command failed: ${stderr || error.message}`, 500)
-          );
-          console.log('Error: ', error);
-          return;
-        }
-
-        resolve(stdout);
-      }
-    );
-  });
-}
-
-async function setupFullStackProject(clientPath, serverPath) {
-  let projectCreationCommand = null;
-  projectCreationCommand = createReactExpressApp(true);
-  await new Promise((resolve, reject) => {
-    exec(
-      projectCreationCommand('.'),
-      { cwd: clientPath },
-      function (error, stdout, stderr) {
-        if (error) {
-          reject(
-            new AppError(`Command failed: ${stderr || error.message}`, 500)
-          );
-          console.log('Error: ', error);
-          return;
-        }
-
-        resolve(stdout);
-      }
-    );
-  });
-
-  projectCreationCommand = createReactExpressApp(false);
-
-  await new Promise((resolve, reject) => {
-    exec(
-      projectCreationCommand('.'),
-      { cwd: serverPath },
       function (error, stdout, stderr) {
         if (error) {
           reject(
@@ -104,20 +61,7 @@ export async function createProjectService(
     const path = createProjectRepositories(uniqueProjectId);
 
     let directoryPath = path;
-    if (projectType == 'fullstack') {
-      // Create the folder with project name
-      fs.mkdirSync(`${directoryPath}/${projectName}`);
-      // We are creating a full stack project
-      // Create 2 folders, one for client and another for server
-      let clientPath = `${directoryPath}/${projectName}/client`;
-      let serverPath = `${directoryPath}/${projectName}/server`;
-      fs.mkdirSync(clientPath);
-      fs.mkdirSync(serverPath);
-
-      await setupFullStackProject(clientPath, serverPath, projectName);
-    } else {
-      await setupSingleProject(directoryPath, projectType, projectName);
-    }
+    await setupSingleProject(directoryPath, projectType, projectName);
 
     return projectName;
   } catch (error) {

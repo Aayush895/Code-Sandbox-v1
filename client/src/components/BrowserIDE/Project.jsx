@@ -17,7 +17,7 @@ import WebTerminal from './WebTerminal/WebTerminal'
 
 function Project() {
   const { projectId } = useParams()
-  const { projectStructure, isPending, isError } =
+  const { projectStructure, isPending, isError, error } =
     useFetchProjectStrcture(projectId)
 
   const { setEditorSocket } = useEditorSocketStore()
@@ -69,7 +69,12 @@ function Project() {
   }, [isPending])
 
   if (isError) {
-    return <Dialog title={'Error'} content={'Error in project creation'} />
+    return (
+      <Dialog
+        title={'Error'}
+        content={error?.response?.data?.message || 'Something went wrong'}
+      />
+    )
   }
 
   return (
@@ -82,7 +87,7 @@ function Project() {
       onClick={handleHideContextMenu}
     >
       {isPending ? (
-        <Loader fullScreen={true} />
+        <Loader fullScreen={true} message="Loading project..." />
       ) : (
         <>
           <Allotment defaultSizes={[20, 60, 20]}>

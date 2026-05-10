@@ -22,6 +22,10 @@ export async function createProjectController(req, res, next) {
       uniqueProjectId
     );
 
+    if (!projectData) {
+      throw new AppError('Failed to create project!', 500);
+    }
+
     if (JSON.stringify(projectData) == '{}') {
       console.log('Project already exists');
       return res.status(409).send({
@@ -53,6 +57,10 @@ export async function fetchProjectTreeController(req, res, next) {
     }
 
     const projectTree = await fetchProjectTreeService(projectId);
+
+    if (!projectTree) {
+      throw new AppError(`Project with id - ${projectId} not found!`, 404);
+    }
 
     return res.status(200).send({
       success: true,

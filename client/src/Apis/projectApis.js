@@ -10,13 +10,8 @@ export async function createProject(project) {
 }
 
 export async function fetchProjectTree(projectId) {
-  try {
-    const fetchProjectResponse = await axiosInstance.get(
-      `api/v0/project-tree/${projectId}`,
-    )
-
-    return fetchProjectResponse?.data
-  } catch (error) {
-    console.log('Error: ', error)
-  }
+  const fetchProjectResponse = await axiosInstance.get(
+    `api/v0/project-tree/${projectId}`,
+  )
+  return fetchProjectResponse?.data
 }

@@ -12,12 +12,4 @@ export function createExpressApp(projectName) {
   return `express --view=ejs ${projectName}`;
 }
 
-export function createReactExpressApp(isClient) {
-  if (isClient) {
-    return createReactCommand;
-  }
-
-  return createExpressApp;
-}
-
 export const CREATE_EXPRESS_APP = '';

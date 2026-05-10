@@ -12,32 +12,6 @@ function Navbar() {
           <span className="text-lg font-semibold">CloudCode</span>
         </div>
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li className="mx-3">
-            <p className="hover:bg-linear-to-br from-[#667eea] to-[#764ba2]">
-              Projects
-            </p>
-          </li>
-          <li className="mx-3">
-            <p className="hover:bg-linear-to-br from-[#667eea] to-[#764ba2]">
-              Templates
-            </p>
-          </li>
-          <li className="mx-3">
-            <p className="hover:bg-linear-to-br from-[#667eea] to-[#764ba2]">
-              Documentation
-            </p>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <div className="avatar avatar-placeholder">
-          <div className="bg-linear-to-br from-[#667eea] to-[#764ba2] shadow-[0_4px_15px_rgba(102,126,234,0.4)] text-neutral-content w-12 rounded-full">
-            <span>SY</span>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

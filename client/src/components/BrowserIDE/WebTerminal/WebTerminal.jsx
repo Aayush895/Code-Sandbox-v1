@@ -42,6 +42,11 @@ function WebTerminal() {
       fitAddOn.fit()
     }, 0)
 
+    const resizeObserver = new ResizeObserver(() => {
+      fitAddOn.fit()
+    })
+    resizeObserver.observe(terminalRef.current)
+
     const ws = new WebSocket(
       `${import.meta.env.VITE_TERMINAL_SOCKET_URL}?projectId=${projectId}`,
     )
@@ -55,6 +60,7 @@ function WebTerminal() {
 
     return () => {
       startedRef.current = false
+      resizeObserver.disconnect()
       terminalInstance.dispose()
       ws.close()
     }
@@ -64,7 +70,7 @@ function WebTerminal() {
   <div
     ref={terminalRef}
     className="terminal w-full h-full"
-    style={{ overflow: 'hidden' }}
+    style={{ overflow: 'hidden', height: '100%' }}
   />
 )
 }

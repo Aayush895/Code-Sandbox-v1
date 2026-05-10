@@ -16,16 +16,7 @@ export const cardTypes = [
     cardTitle: 'Express API',
     cardDesc:
       'Node.js backend with Express framework, ready for REST API development.',
-    cardBadges: ['Node.js', 'Express', 'REST API', 'Middleware'],
+    cardBadges: ['Node.js', 'Express', 'Express-Generator',  'REST API', 'Middleware'],
     cardIcon: '🚀',
-  },
-  {
-    id: 3,
-    type: 'fullstack',
-    cardTitle: 'React + Express',
-    cardDesc:
-      'Full-stack setup with React frontend and Express backend, pre-configured to work together.',
-    cardBadges: ['Full Stack', 'React', 'Express', 'Proxy'],
-    cardIcon: '🔗',
-  },
+  }
 ]

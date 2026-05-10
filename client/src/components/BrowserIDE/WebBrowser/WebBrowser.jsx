@@ -3,6 +3,7 @@ import { IoReloadSharp } from 'react-icons/io5'
 import { useParams } from 'react-router'
 import useEditorSocketStore from '../../../store/useEditorSocketStore'
 import { usePortStore } from '../../../store/usePortStore'
+import Loader from '../../Shared/Loader'
 
 function WebBrowser() {
   const browserRef = useRef(null)
@@ -32,7 +33,7 @@ function WebBrowser() {
   if (!port) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <span className="loading loading-spinner loading-xl"></span>
+        <Loader message="Loading browser..." />
       </div>
     )
   }
