@@ -10,6 +10,7 @@ import useEditorSocketStore from '../../store/useEditorSocketStore'
 import ContextMenu from '../Shared/ContextMenu'
 import Dialog from '../Shared/Dialog'
 import Loader from '../Shared/Loader'
+import Toast from '../Shared/Toast'
 import BrowserEditor from './Editor/BrowserEditor'
 import ProjectFolder from './FolderStructure/ProjectFolder'
 import WebBrowser from './WebBrowser/WebBrowser'
@@ -86,6 +87,7 @@ function Project() {
       }}
       onClick={handleHideContextMenu}
     >
+      <Toast />
       {isPending ? (
         <Loader fullScreen={true} message="Loading project..." />
       ) : (

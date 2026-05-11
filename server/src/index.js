@@ -5,7 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import { Server } from 'socket.io';
 
-import { PORT } from './config/serverConfig.js';
+import { CLIENT_URL,PORT } from './config/serverConfig.js';
 import editorHandlers from './handlers/editorHandlers.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import v0Router from './routes/v0Routes.js';
@@ -14,7 +14,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: CLIENT_URL,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   },
 });
@@ -23,7 +23,7 @@ app.use(express.urlencoded());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: [CLIENT_URL],
     methods: ['GET', 'POST'],
   })
 );

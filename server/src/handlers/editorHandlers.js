@@ -13,7 +13,7 @@ function editorHandlers(socket, nameSpaceSocket) {
       console.log(`The User - ${socket.id} is connected to room: ${roomId}`);
     } catch (error) {
       console.log('Error in joining the room: ', error);
-      socket.emit('Error', {
+      socket.emit('socket-error', {
         message: 'Error in joining the room: ',
       });
     }
@@ -25,8 +25,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       console.log(`The User - ${socket.id} left the room: ${prevRoomId}`);
     } catch (error) {
       console.log('Error in leaving the room: ', error);
-      socket.emit('Error', {
-        message: 'Error in leaving the room',
+      socket.emit('socket-error', {
+        message: 'Error while leaving the room',
       });
     }
   }
@@ -41,8 +41,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error reading the file: ', error);
-      socket.emit('Error', {
-        message: 'Error reading the file',
+      socket.emit('socket-error', {
+        message: 'Error while reading the file',
       });
     }
   }
@@ -57,8 +57,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in writing the file: ', error);
-      socket.emit('Error', {
-        message: 'Error in writing the file',
+      socket.emit('socket-error', {
+        message: 'Error while writing the file',
       });
     }
   }
@@ -73,8 +73,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in deleting the file: ', error);
-      socket.emit('Error', {
-        message: 'Error in deleting the file',
+      socket.emit('socket-error', {
+        message: 'Error while deleting the file',
       });
     }
   }
@@ -89,8 +89,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in deleting the folder: ', error);
-      socket.emit('Error', {
-        message: 'Error in deleting the folder',
+      socket.emit('socket-error', {
+        message: 'Error while deleting the folder',
       });
     }
   }
@@ -113,8 +113,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in renaming the folder: ', error);
-      socket.emit('Error', {
-        message: 'Error in renaming the folder',
+      socket.emit('socket-error', {
+        message: 'Error while renaming the folder',
       });
     }
   }
@@ -138,8 +138,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in renaming the file: ', error);
-      socket.emit('Error', {
-        message: 'Error in renaming the file',
+      socket.emit('socket-error', {
+        message: 'Error while renaming the file',
       });
     }
   }
@@ -148,7 +148,7 @@ function editorHandlers(socket, nameSpaceSocket) {
   async function createFileHandler({ folderPath, projectId, newFileName }) {
     try {
       if (fsSync.existsSync(`${folderPath}/${newFileName}`)) {
-        return socket.emit('error', {
+        return socket.emit('socket-error', {
           message: 'The folder with the given name already exists!',
         });
       }
@@ -159,8 +159,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in creating the file: ', error);
-      socket.emit('Error', {
-        data: 'Error creating the file',
+      socket.emit('socket-error', {
+        message: 'Error while creating the file',
       });
     }
   }
@@ -169,7 +169,7 @@ function editorHandlers(socket, nameSpaceSocket) {
   async function createFolderHandler({ folderPath, projectId, newFolderName }) {
     try {
       if (fsSync.existsSync(`${folderPath}/${newFolderName}`)) {
-        return socket.emit('error', {
+        return socket.emit('socket-error', {
           message: 'The folder with the given name already exists!',
         });
       }
@@ -180,8 +180,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error creating the folder: ', error);
-      socket.emit('error', {
-        data: 'Error creating the folder',
+      socket.emit('socket-error', {
+        message: 'Error while creating the folder',
       });
     }
   }
@@ -196,8 +196,8 @@ function editorHandlers(socket, nameSpaceSocket) {
       });
     } catch (error) {
       console.log('Error in fetching ports: ', error);
-      socket.emit('error', {
-        data: 'Error in fetching the ports',
+      socket.emit('socket-error', {
+        message: 'Error while fetching the ports',
       });
     }
   }

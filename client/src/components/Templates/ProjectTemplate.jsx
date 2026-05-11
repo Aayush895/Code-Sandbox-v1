@@ -50,7 +50,7 @@ function ProjectTemplate() {
       clearInterval(timerId)
     }
   }, [error])
-  console.log('LOGGING project: ', project)
+  
   return (
     <div className="min-h-screen bg-base-200 py-16 px-6">
       <div className="max-w-6xl mx-auto">

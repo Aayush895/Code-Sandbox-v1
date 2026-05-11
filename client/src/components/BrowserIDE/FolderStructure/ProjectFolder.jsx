@@ -64,6 +64,8 @@ function ProjectFolder({
 
   function handleContextMenu(e, rootDirectory, fileName = null) {
     e.preventDefault()
+    if (isRoot) return
+
     setShowContextMenu(true)
     setXCoord(e.pageX)
     setYCoord(e.pageY)

@@ -4,6 +4,7 @@ import { fetchProjectTree } from '../Apis/projectApis'
 import useEditorStore from './useEditorStore'
 import { usePortStore } from './usePortStore'
 import useProjectStore from './useProjectStore'
+import { useToastStore } from './useToastStore'
 
 const useEditorSocketStore = create(
   devtools((set) => ({
@@ -14,17 +15,17 @@ const useEditorSocketStore = create(
       const projectStructureSetterFn =
         useProjectStore.getState().setProjectStructure
       const setPorts = usePortStore.getState().setPorts
+      const toastMessageSetterFn = useToastStore.getState().setMessage
 
       incomingSocketObj?.on('read-file-success', ({ fileData, activeFile }) => {
         activeFileSetterFn(activeFile)
         fileContentsSetterFn(fileData)
       })
 
-      incomingSocketObj?.on('write-file-success', ({ activeFile, message }) => {
+      incomingSocketObj?.on('write-file-success', ({ activeFile }) => {
         incomingSocketObj?.emit('read-file', {
           filePath: activeFile,
         })
-        console.log(message)
       })
 
       incomingSocketObj?.on('delete-file-success', async ({ projectId }) => {
@@ -74,11 +75,14 @@ const useEditorSocketStore = create(
       })
 
       incomingSocketObj?.on('fetch-port-success', ({ ports }) => {
-        console.log('fetch-port-success received:', ports)
         setPorts({
           react: ports?.react,
-          express: ports?.express
+          express: ports?.express,
         })
+      })
+
+      incomingSocketObj?.on('socket-error', ({ message }) => {
+        toastMessageSetterFn(message)
       })
 
       set({
