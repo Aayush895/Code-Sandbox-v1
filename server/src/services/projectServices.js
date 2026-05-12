@@ -39,17 +39,32 @@ async function setupSingleProject(directoryPath, projectType, projectName) {
 }
 
 function createProjectRepositories(uniqueProjectId) {
-  try {
-    const basePath = `./projects/${uniqueProjectId}`;
-    fs.mkdirSync(basePath, { recursive: true });
-    console.log(`Directory './projects/${uniqueProjectId}' created.`);
+  return new Promise((resolve, reject) => {
+    try {
+      const basePath = path.resolve(`./projects/${uniqueProjectId}`);
+      fs.mkdirSync(basePath, { recursive: true });
+      console.log(`Directory created at: ${basePath}`);
 
-    return `./projects/${uniqueProjectId}`;
-  } catch (error) {
-    throw new AppError(
-      `Failed to create project directory [id=${uniqueProjectId}]: ${error.message}`
-    );
-  }
+      exec(
+        `chown -R sandbox:sandbox ${basePath} && chmod -R 777 ${basePath}`,
+        (error) => {
+          if (error) {
+            reject(
+              new AppError(`Failed to set ownership: ${error.message}`, 500)
+            );
+            return;
+          }
+          resolve(basePath);
+        }
+      );
+    } catch (error) {
+      reject(
+        new AppError(
+          `Failed to create project directory [id=${uniqueProjectId}]: ${error.message}`
+        )
+      );
+    }
+  });
 }
 
 export async function createProjectService(
@@ -58,10 +73,26 @@ export async function createProjectService(
   uniqueProjectId
 ) {
   try {
-    const path = createProjectRepositories(uniqueProjectId);
-
-    let directoryPath = path;
+    const directoryPath = await createProjectRepositories(uniqueProjectId);
     await setupSingleProject(directoryPath, projectType, projectName);
+
+    await new Promise((resolve, reject) => {
+      exec(
+        `chown -R sandbox:sandbox ${directoryPath} && chmod -R 777 ${directoryPath}`,
+        (error) => {
+          if (error) {
+            reject(
+              new AppError(
+                `Failed to set ownership after setup: ${error.message}`,
+                500
+              )
+            );
+            return;
+          }
+          resolve();
+        }
+      );
+    });
 
     return projectName;
   } catch (error) {
