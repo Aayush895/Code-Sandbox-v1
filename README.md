@@ -18,27 +18,17 @@ This is a **prototype**, not a production application. The goal was to simplify 
 
 ### Creating a Project
 
-![Create Project](https://dummy-link.com/screenshots/create-project.png)
+![Home Page](./Screenshots/Home-Page.png)
+
+![Create Project](./Screenshots/Project-template.png)
 
 ### Code Editor with Live Collaboration
 
-![Editor](https://dummy-link.com/screenshots/editor.png)
+![Editor](./Screenshots/Web-Browser-Ide.png)
 
-### Web Terminal in Action
 
-![Terminal](https://dummy-link.com/screenshots/terminal.png)
-
-### Inbuilt Browser Preview
-
-![Browser](https://dummy-link.com/screenshots/browser.png)
-
-### Screen Recordings
-
-| Feature                          | Recording                                                    |
-| -------------------------------- | ------------------------------------------------------------ |
-| Creating and running a React app | [Watch](https://dummy-link.com/recordings/react-app.mp4)     |
-| Live collaborative editing       | [Watch](https://dummy-link.com/recordings/collaboration.mp4) |
-| Terminal usage                   | [Watch](https://dummy-link.com/recordings/terminal.mp4)      |
+### Screen Recording
+| Project Recording | [Watch](./Screenshots/Project-recording.mov)     |
 
 ---
 
