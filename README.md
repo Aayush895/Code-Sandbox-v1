@@ -32,6 +32,11 @@ This is a **prototype**, not a production application. The goal was to simplify 
 
 ---
 
+## Project Startup
+
+- `React Apps`: Once the necessary packages have been installed after running `npm install` command, run the project via this command only, `npm run dev -- --host 0.0.0.0`
+- `Express Apps`: Once the necessary packages have been installed after running `npm install` command, go inside the `bin` folder and open the file with name `www` and replace line number 28 with the following code `server.listen(port, '0.0.0.0');`
+
 ## ✨ Features
 
 ### 🗂️ Project Creation
