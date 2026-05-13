@@ -18,17 +18,17 @@ This is a **prototype**, not a production application. The goal was to simplify 
 
 ### Creating a Project
 
-![Home Page](./Screenshots/Home-Page.png)
+![Home Page](https://github.com/user-attachments/assets/db703b45-1010-407b-987c-912a52c5aadd)
 
-![Create Project](./Screenshots/Project-template.png)
+![Create Project](https://github.com/user-attachments/assets/01fc97ff-3903-4ceb-820b-1edbc91c2ac9)
 
-### Code Editor with Live Collaboration
+### Code Editor
 
-![Editor](./Screenshots/Web-Browser-Ide.png)
+![Editor](https://github.com/user-attachments/assets/d17411da-7360-46c2-a9a0-f18adb76266c)
 
 
 ### Screen Recording
-| Project Recording | [Watch](./Screenshots/Project-recording.mov)     |
+| Application Demo | [Watch](https://res.cloudinary.com/dlbkhcvej/video/upload/v1778676942/Project-recording_jopqex.mov)     |
 
 ---
 
